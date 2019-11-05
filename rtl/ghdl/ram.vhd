@@ -83,7 +83,7 @@ signal ram : ram_type :=
 0012 => b"000000000001" & "00001" & RV32_FN3_ADDI & "00001" & RV32I_OP_IMM,
 0013 => b"000000000011" & "00010" & RV32_FN3_ADDI & "00010" & RV32I_OP_IMM,
 
-others => x"00000000"
+others => x"00000013"
 
 );
 

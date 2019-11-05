@@ -146,6 +146,11 @@ package veresk_pkg is
 	wdat		: cell_type;
     end record;
 
+    type alu_type is record
+	wreg_en		: std_logic;
+	wdat		: cell_type;
+    end record;
+
     -- Vectors
 
     constant START_ADDR		: cell_type := x"0000_0000";

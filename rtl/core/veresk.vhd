@@ -27,13 +27,13 @@ architecture rtl of veresk is
 
     signal fetch_in		: fetch_in_type;
     signal fetch_out		: fetch_out_type;
-    signal fetch_stall		: std_logic;
+    signal fetch_stall		: std_logic := '0';
 
-    signal decode_en		: std_logic;
+    signal decode_en		: std_logic := '0';
     signal decode, decode_reg	: decode_type;
-    signal decode_hazard	: std_logic;
+    signal decode_hazard	: std_logic := '0';
 
-    signal exec_en		: std_logic;
+    signal exec_en		: std_logic := '0';
     signal exec, exec_reg	: exec_type;
 
     signal rs1_dat, rs2_dat	: cell_type;
@@ -78,7 +78,7 @@ begin
 	decode_hazard <= '0';
 
 	if fetch_stall = '0' then
-	    if exec.wreg_en = '1' then
+	    if exec.wreg_en = '1' and exec.wreg /= "00000" then
 		if exec.wreg = decode.rs1 and decode.hazard_rs1 = '1' then
 		    decode_hazard <= '1';
 		end if;

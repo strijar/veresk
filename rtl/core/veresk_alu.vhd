@@ -36,54 +36,98 @@ use ieee.numeric_std.all;
 library work;
 use work.veresk_pkg.all;
 
-entity veresk_exec is
+entity veresk_alu is
     port (
 	decode		: in decode_type;
 	r1		: in cell_type;
 	r2		: in cell_type;
 
-	exec_out	: out exec_type
+	alu_out		: out alu_type
     );
-end veresk_exec;
+end veresk_alu;
 
-architecture rtl of veresk_exec is
+architecture rtl of veresk_alu is
 
-    signal exec	: exec_type;
-    signal alu	: alu_type;
+    signal alu		: alu_type;
 
 begin
 
-    exec_out <= exec;
+    alu_out <= alu;
 
-    alu_i: entity work.veresk_alu
-	port map(
-	    r1		=> r1,
-	    r2		=> r2,
-	    decode	=> decode,
-
-	    alu_out	=> alu
-	);
-
-    process (decode, alu) begin
-	exec.wreg_en <= '0';
-	exec.wreg <= (others => '0');
-	exec.wdat <= (others => '0');
+    process (decode, r1, r2) begin
+	alu.wreg_en <= '0';
+	alu.wdat <= (others => '0');
 
 	case decode.op is
-	    when RV32I_OP_LUI =>
-		exec.wreg_en <= '1';
-		exec.wreg <= decode.rd;
-		exec.wdat <= decode.imm;
-
 	    when RV32I_OP_IMM =>
-		exec.wreg_en <= alu.wreg_en;
-		exec.wreg <= decode.rd;
-		exec.wdat <= alu.wdat;
+		alu.wreg_en <= '1';
+
+		case decode.fn3 is
+		    when RV32_FN3_ADDI =>
+		        alu.wdat <= std_logic_vector(unsigned(r1) + unsigned(decode.imm));
+
+		    when RV32_FN3_SLTI =>
+			if signed(r1) < signed(decode.imm) then
+			    alu.wdat <= x"00000001";
+			else
+			    alu.wdat <= x"00000000";
+			end if;
+
+		    when RV32_FN3_SLTIU =>
+			if unsigned(r1) < unsigned(decode.imm) then
+			    alu.wdat <= x"00000001";
+			else
+			    alu.wdat <= x"00000000";
+			end if;
+
+		    when RV32_FN3_ANDI =>
+		        alu.wdat <= r1 and decode.imm;
+
+		    when RV32_FN3_ORI =>
+		        alu.wdat <= r1 or decode.imm;
+
+		    when RV32_FN3_XORI =>
+		        alu.wdat <= r1 xor decode.imm;
+
+		    when others =>
+		end case;
 
 	    when RV32I_OP_REG =>
-		exec.wreg_en <= alu.wreg_en;
-		exec.wreg <= decode.rd;
-		exec.wdat <= alu.wdat;
+		alu.wreg_en <= '1';
+
+		case decode.fn3 is
+		    when RV32_FN3_ADD =>
+			if decode.fn7 = RV32_FN7_0 then
+		    	    alu.wdat <= std_logic_vector(signed(r1) + signed(r2));
+		    	else
+		    	    alu.wdat <= std_logic_vector(signed(r1) - signed(r2));
+		    	end if;
+
+		    when RV32_FN3_SLT =>
+			if signed(r1) < signed(r2) then
+			    alu.wdat <= x"00000001";
+			else
+			    alu.wdat <= x"00000000";
+			end if;
+
+		    when RV32_FN3_SLTU =>
+			if unsigned(r1) < unsigned(r2) then
+			    alu.wdat <= x"00000001";
+			else
+			    alu.wdat <= x"00000000";
+			end if;
+
+		    when RV32_FN3_AND =>
+		        alu.wdat <= r1 and r2;
+
+		    when RV32_FN3_OR =>
+		        alu.wdat <= r1 or r2;
+
+		    when RV32_FN3_XOR =>
+		        alu.wdat <= r1 xor r2;
+
+		    when others =>
+		end case;
 
 	    when others =>
 	end case;

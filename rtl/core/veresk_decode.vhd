@@ -119,6 +119,7 @@ begin
 		decode.imm(10 downto 5) <= inst(30 downto 25);
 		decode.imm(4 downto 1) <= inst(11 downto 8);
 		decode.imm(11) <= inst(7);
+		decode.imm(0) <= '0';
 
 	    when utype =>
 		decode.rd <= inst(11 downto 7);
@@ -131,6 +132,7 @@ begin
 		decode.imm(10 downto 1) <= inst(30 downto 21);
 		decode.imm(11 downto 11) <= inst(20 downto 20);
 		decode.imm(19 downto 12) <= inst(19 downto 12);
+		decode.imm(0) <= '0';
 
 	    when others =>
 		end case;
