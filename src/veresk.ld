@@ -5,7 +5,7 @@ MEMORY
 	RAM (rwx)    : ORIGIN = 0x00000000, LENGTH = 0x00001000
 }
 
-_stack = 0x0001000;
+_stack_size = 256;
 
 SECTIONS
 {
@@ -41,6 +41,11 @@ SECTIONS
 		__bss_end = ALIGN(4);
 	} > RAM
 
+	.stack ALIGN(4) :
+	{
+		. = . + _stack_size;
+		_stack = .;
+	} > RAM
 
 	/* Set the start of the stack to the top of RAM: */
 
