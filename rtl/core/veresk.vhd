@@ -41,8 +41,7 @@ architecture rtl of veresk is
 
 begin
 
-    fetch_in.target_en <= '0';
-    fetch_in.target <= (others => '0');
+    fetch_in.target <= exec.target;
 
     decode_en <= '1';
     exec_en <= '1';
@@ -64,10 +63,17 @@ begin
 	end if;
     end process;
 
-    process (idle, decode_hazard, fetch_stall) begin
-	fetch_in.step <= not idle;
+    process (idle, decode_hazard, fetch_stall, exec) begin
+	fetch_in.step <= '1';
+	fetch_in.target_en <= '0';
+
+	if idle = '1' or exec.target_en = '1' then
+	    fetch_in.step <= '0';
+	end if;
 
 	if fetch_stall = '0' then
+	    fetch_in.target_en <= exec.target_en;
+
 	    if decode_hazard = '1' then
 		fetch_in.step <= '0';
 	    end if;
@@ -78,6 +84,10 @@ begin
 	decode_hazard <= '0';
 
 	if fetch_stall = '0' then
+	    if exec.target_en = '1' then
+		decode_hazard <= '1';
+	    end if;
+	
 	    if exec.wreg_en = '1' and exec.wreg /= "00000" then
 		if exec.wreg = decode.rs1 and decode.hazard_rs1 = '1' then
 		    decode_hazard <= '1';

@@ -54,6 +54,7 @@ begin
 
     inst <= fetch.inst;
     decode.op <= inst(6 downto 0);
+    decode.pc <= fetch.pc;
 
     with decode.op select decode.subset <=
 	utype	when RV32I_OP_LUI,

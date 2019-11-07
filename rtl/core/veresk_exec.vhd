@@ -48,8 +48,8 @@ end veresk_exec;
 
 architecture rtl of veresk_exec is
 
-    signal exec	: exec_type;
-    signal alu	: alu_type;
+    signal exec		: exec_type;
+    signal alu		: alu_type;
 
 begin
 
@@ -64,10 +64,12 @@ begin
 	    alu_out	=> alu
 	);
 
-    process (decode, alu) begin
+    process (decode, alu, r1, r2) begin
 	exec.wreg_en <= '0';
 	exec.wreg <= (others => '0');
 	exec.wdat <= (others => '0');
+	exec.target_en <= '0';
+	exec.target <= (others => '0');
 
 	case decode.op is
 	    when RV32I_OP_LUI =>
@@ -84,6 +86,25 @@ begin
 		exec.wreg_en <= alu.wreg_en;
 		exec.wreg <= decode.rd;
 		exec.wdat <= alu.wdat;
+
+	    when RV32I_OP_AUIPC =>
+		exec.wreg_en <= '1';
+		exec.wreg <= decode.rd;
+		exec.wdat <= std_logic_vector(unsigned(decode.pc) + unsigned(decode.imm));
+		
+	    when RV32I_OP_JAL =>
+		exec.wreg_en <= '1';
+		exec.wreg <= decode.rd;
+		exec.wdat <= std_logic_vector(unsigned(decode.pc) + 4);
+		exec.target_en <= '1';
+		exec.target <= unsigned(signed(decode.pc) + signed(decode.imm));
+
+	    when RV32I_OP_JALR =>
+		exec.wreg_en <= '1';
+		exec.wreg <= decode.rd;
+		exec.wdat <= std_logic_vector(unsigned(decode.pc) + 4);
+		exec.target_en <= '1';
+		exec.target <= unsigned(signed(r1) + signed(decode.imm));
 
 	    when others =>
 	end case;

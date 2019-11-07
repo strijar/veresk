@@ -109,16 +109,18 @@ package veresk_pkg is
 	ibus_out	: ibus_out_type;
     end record;
 
+    subtype pc_type is unsigned(CELL_BITS-1 downto 0);
+
     type fetch_in_type is record
 	step		: std_logic;
 	target_en	: std_logic;
-	target		: unsigned(CELL_BITS-1 downto 0);
+	target		: pc_type;
     end record;
 
     type fetch_out_type is record
 	ready		: std_logic;
 	inst		: cell_type;
-	pc		: unsigned(CELL_BITS-1 downto 0);
+	pc		: pc_type;
     end record;
 
     subtype reg_type is std_logic_vector(4 downto 0);
@@ -138,12 +140,17 @@ package veresk_pkg is
 
 	hazard_rs1	: std_logic;
 	hazard_rs2	: std_logic;
+
+	pc 		: pc_type;
     end record;
 
     type exec_type is record
 	wreg_en		: std_logic;
 	wreg		: reg_type;
 	wdat		: cell_type;
+
+	target_en	: std_logic;
+	target		: pc_type;
     end record;
 
     type alu_type is record
