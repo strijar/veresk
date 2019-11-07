@@ -38,9 +38,6 @@ use work.veresk_pkg.all;
 
 entity veresk_fetch is
     port (
-	clk		: in std_logic;
-	rst		: in std_logic;
-
 	fetch_in	: in fetch_in_type;
 	ibus_in		: in ibus_in_type;
 
@@ -51,41 +48,22 @@ end veresk_fetch;
 
 architecture rtl of veresk_fetch is
 
-    signal pc, pc_next		: unsigned(CELL_BITS-1 downto 0) := (others => '0');
-    signal ready, ready_next	: std_logic := '0';
+    signal fetch        : fetch_out_type;
 
 begin
-    ibus_out.addr <= std_logic_vector(pc_next);
 
-    fetch_out.inst <= ibus_in.dat;
-    fetch_out.pc <= pc;
-    fetch_out.ready <= ready;
+    fetch_out <= fetch;
 
-    process (fetch_in, pc) begin
-	ready_next <= '0';
-	pc_next <= pc;
+    ibus_out.addr <= std_logic_vector(fetch.pc);
+    fetch.inst <= ibus_in.dat;
+
+    process (fetch_in) begin
+        fetch.pc <= fetch_in.pc;
 
 	if fetch_in.target_en = '1' then
-	    pc_next <= fetch_in.target;
-	    ready_next <= '1';
+	    fetch.pc <= fetch_in.target;
 	elsif fetch_in.step = '1' then
-	    pc_next <= pc + 4;
-	    ready_next <= '1';
-	else
-	    pc_next <= pc;
-	    ready_next <= '1';
-	end if;
-    end process;
-
-    process (clk, rst) begin
-	if rising_edge(clk) then
-	    if rst = '1' then
-		pc <= unsigned(START_ADDR);
-		ready <= '0';
-	    else
-		pc <= pc_next;
-		ready <= ready_next;
-	    end if;
+	    fetch.pc <= fetch_in.pc + 4;
 	end if;
     end process;
 

@@ -1,48 +1,48 @@
 [*]
-[*] GTKWave Analyzer v3.3.79 (w)1999-2017 BSI
-[*] Fri Nov  1 11:39:55 2019
+[*] GTKWave Analyzer v3.3.67 (w)1999-2015 BSI
+[*] Thu Nov  7 21:27:12 2019
 [*]
-[dumpfile] "/home/master/fpga/veresk/ghdl/tb_veresk.ghw"
-[dumpfile_mtime] "Fri Nov  1 11:39:04 2019"
-[dumpfile_size] 1048695
-[savefile] "/home/master/fpga/veresk/ghdl/tb_veresk.gtkw"
+[dumpfile] "/home/master/fpga/risc-v/veresk/rtl/ghdl/tb_veresk.ghw"
+[dumpfile_mtime] "Thu Nov  7 21:24:54 2019"
+[dumpfile_size] 1052692
+[savefile] "/home/master/fpga/risc-v/veresk/rtl/ghdl/tb_veresk.gtkw"
 [timestart] 0
-[size] 1920 1043
-[pos] -1 -1
-*-25.000000 15600000 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+[size] 1280 1000
+[pos] 1919 0
+*-25.000000 20000000 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
 [treeopen] top.
 [treeopen] top.tb_veresk.
 [treeopen] top.tb_veresk.cpu.
-[sst_width] 272
+[sst_width] 228
 [signals_width] 230
 [sst_expanded] 1
-[sst_vpaned_height] 301
+[sst_vpaned_height] 295
 @28
 top.tb_veresk.clk
 top.tb_veresk.reset
 @200
 -
--Control
-@29
-top.tb_veresk.cpu.decode_hazard
-@28
-top.tb_veresk.cpu.fetch_stall
-@200
--
+@800200
 -IMem
 @22
 #{top.tb_veresk.ibus_out.addr[31:0]} top.tb_veresk.ibus_out.addr[31] top.tb_veresk.ibus_out.addr[30] top.tb_veresk.ibus_out.addr[29] top.tb_veresk.ibus_out.addr[28] top.tb_veresk.ibus_out.addr[27] top.tb_veresk.ibus_out.addr[26] top.tb_veresk.ibus_out.addr[25] top.tb_veresk.ibus_out.addr[24] top.tb_veresk.ibus_out.addr[23] top.tb_veresk.ibus_out.addr[22] top.tb_veresk.ibus_out.addr[21] top.tb_veresk.ibus_out.addr[20] top.tb_veresk.ibus_out.addr[19] top.tb_veresk.ibus_out.addr[18] top.tb_veresk.ibus_out.addr[17] top.tb_veresk.ibus_out.addr[16] top.tb_veresk.ibus_out.addr[15] top.tb_veresk.ibus_out.addr[14] top.tb_veresk.ibus_out.addr[13] top.tb_veresk.ibus_out.addr[12] top.tb_veresk.ibus_out.addr[11] top.tb_veresk.ibus_out.addr[10] top.tb_veresk.ibus_out.addr[9] top.tb_veresk.ibus_out.addr[8] top.tb_veresk.ibus_out.addr[7] top.tb_veresk.ibus_out.addr[6] top.tb_veresk.ibus_out.addr[5] top.tb_veresk.ibus_out.addr[4] top.tb_veresk.ibus_out.addr[3] top.tb_veresk.ibus_out.addr[2] top.tb_veresk.ibus_out.addr[1] top.tb_veresk.ibus_out.addr[0]
 #{top.tb_veresk.ibus_in.dat[31:0]} top.tb_veresk.ibus_in.dat[31] top.tb_veresk.ibus_in.dat[30] top.tb_veresk.ibus_in.dat[29] top.tb_veresk.ibus_in.dat[28] top.tb_veresk.ibus_in.dat[27] top.tb_veresk.ibus_in.dat[26] top.tb_veresk.ibus_in.dat[25] top.tb_veresk.ibus_in.dat[24] top.tb_veresk.ibus_in.dat[23] top.tb_veresk.ibus_in.dat[22] top.tb_veresk.ibus_in.dat[21] top.tb_veresk.ibus_in.dat[20] top.tb_veresk.ibus_in.dat[19] top.tb_veresk.ibus_in.dat[18] top.tb_veresk.ibus_in.dat[17] top.tb_veresk.ibus_in.dat[16] top.tb_veresk.ibus_in.dat[15] top.tb_veresk.ibus_in.dat[14] top.tb_veresk.ibus_in.dat[13] top.tb_veresk.ibus_in.dat[12] top.tb_veresk.ibus_in.dat[11] top.tb_veresk.ibus_in.dat[10] top.tb_veresk.ibus_in.dat[9] top.tb_veresk.ibus_in.dat[8] top.tb_veresk.ibus_in.dat[7] top.tb_veresk.ibus_in.dat[6] top.tb_veresk.ibus_in.dat[5] top.tb_veresk.ibus_in.dat[4] top.tb_veresk.ibus_in.dat[3] top.tb_veresk.ibus_in.dat[2] top.tb_veresk.ibus_in.dat[1] top.tb_veresk.ibus_in.dat[0]
-@200
--
--Fetch
+@1000200
+-IMem
+@800200
+-Control
 @28
-top.tb_veresk.cpu.fetch_in.step
-@22
-#{top.tb_veresk.cpu.fetch_out.pc[31:0]} top.tb_veresk.cpu.fetch_out.pc[31] top.tb_veresk.cpu.fetch_out.pc[30] top.tb_veresk.cpu.fetch_out.pc[29] top.tb_veresk.cpu.fetch_out.pc[28] top.tb_veresk.cpu.fetch_out.pc[27] top.tb_veresk.cpu.fetch_out.pc[26] top.tb_veresk.cpu.fetch_out.pc[25] top.tb_veresk.cpu.fetch_out.pc[24] top.tb_veresk.cpu.fetch_out.pc[23] top.tb_veresk.cpu.fetch_out.pc[22] top.tb_veresk.cpu.fetch_out.pc[21] top.tb_veresk.cpu.fetch_out.pc[20] top.tb_veresk.cpu.fetch_out.pc[19] top.tb_veresk.cpu.fetch_out.pc[18] top.tb_veresk.cpu.fetch_out.pc[17] top.tb_veresk.cpu.fetch_out.pc[16] top.tb_veresk.cpu.fetch_out.pc[15] top.tb_veresk.cpu.fetch_out.pc[14] top.tb_veresk.cpu.fetch_out.pc[13] top.tb_veresk.cpu.fetch_out.pc[12] top.tb_veresk.cpu.fetch_out.pc[11] top.tb_veresk.cpu.fetch_out.pc[10] top.tb_veresk.cpu.fetch_out.pc[9] top.tb_veresk.cpu.fetch_out.pc[8] top.tb_veresk.cpu.fetch_out.pc[7] top.tb_veresk.cpu.fetch_out.pc[6] top.tb_veresk.cpu.fetch_out.pc[5] top.tb_veresk.cpu.fetch_out.pc[4] top.tb_veresk.cpu.fetch_out.pc[3] top.tb_veresk.cpu.fetch_out.pc[2] top.tb_veresk.cpu.fetch_out.pc[1] top.tb_veresk.cpu.fetch_out.pc[0]
-#{top.tb_veresk.cpu.fetch_out.inst[31:0]} top.tb_veresk.cpu.fetch_out.inst[31] top.tb_veresk.cpu.fetch_out.inst[30] top.tb_veresk.cpu.fetch_out.inst[29] top.tb_veresk.cpu.fetch_out.inst[28] top.tb_veresk.cpu.fetch_out.inst[27] top.tb_veresk.cpu.fetch_out.inst[26] top.tb_veresk.cpu.fetch_out.inst[25] top.tb_veresk.cpu.fetch_out.inst[24] top.tb_veresk.cpu.fetch_out.inst[23] top.tb_veresk.cpu.fetch_out.inst[22] top.tb_veresk.cpu.fetch_out.inst[21] top.tb_veresk.cpu.fetch_out.inst[20] top.tb_veresk.cpu.fetch_out.inst[19] top.tb_veresk.cpu.fetch_out.inst[18] top.tb_veresk.cpu.fetch_out.inst[17] top.tb_veresk.cpu.fetch_out.inst[16] top.tb_veresk.cpu.fetch_out.inst[15] top.tb_veresk.cpu.fetch_out.inst[14] top.tb_veresk.cpu.fetch_out.inst[13] top.tb_veresk.cpu.fetch_out.inst[12] top.tb_veresk.cpu.fetch_out.inst[11] top.tb_veresk.cpu.fetch_out.inst[10] top.tb_veresk.cpu.fetch_out.inst[9] top.tb_veresk.cpu.fetch_out.inst[8] top.tb_veresk.cpu.fetch_out.inst[7] top.tb_veresk.cpu.fetch_out.inst[6] top.tb_veresk.cpu.fetch_out.inst[5] top.tb_veresk.cpu.fetch_out.inst[4] top.tb_veresk.cpu.fetch_out.inst[3] top.tb_veresk.cpu.fetch_out.inst[2] top.tb_veresk.cpu.fetch_out.inst[1] top.tb_veresk.cpu.fetch_out.inst[0]
-@200
+top.tb_veresk.cpu.fetch_en
+top.tb_veresk.cpu.fetch_ready
+top.tb_veresk.cpu.decode_en
+top.tb_veresk.cpu.decode_ready
+top.tb_veresk.cpu.exec_en
+top.tb_veresk.cpu.exec_ready
+@1000200
+-Control
+@201
 -
+@200
 -Decode
 @28
 top.tb_veresk.cpu.decode.subset

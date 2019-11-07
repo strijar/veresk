@@ -112,13 +112,13 @@ package veresk_pkg is
     subtype pc_type is unsigned(CELL_BITS-1 downto 0);
 
     type fetch_in_type is record
+        pc              : pc_type;
 	step		: std_logic;
 	target_en	: std_logic;
 	target		: pc_type;
     end record;
 
     type fetch_out_type is record
-	ready		: std_logic;
 	inst		: cell_type;
 	pc		: pc_type;
     end record;
@@ -129,7 +129,6 @@ package veresk_pkg is
 
     type decode_type is record
 	subset		: subset_type;
-
 	op		: op_type;
 	rd		: reg_type;
 	fn3		: op_fn3_type;
@@ -137,10 +136,8 @@ package veresk_pkg is
 	rs2		: reg_type;
 	imm		: cell_type;
 	fn7		: op_fn7_type;
-
 	hazard_rs1	: std_logic;
 	hazard_rs2	: std_logic;
-
 	pc 		: pc_type;
     end record;
 
