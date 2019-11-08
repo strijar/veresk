@@ -38,6 +38,7 @@ use work.veresk_pkg.all;
 
 entity veresk_fetch is
     port (
+	pc		: in pc_type;
 	fetch_in	: in fetch_in_type;
 	ibus_in		: in ibus_in_type;
 
@@ -57,13 +58,13 @@ begin
     ibus_out.addr <= std_logic_vector(fetch.pc);
     fetch.inst <= ibus_in.dat;
 
-    process (fetch_in) begin
-        fetch.pc <= fetch_in.pc;
+    process (fetch_in, pc) begin
+        fetch.pc <= pc;
 
 	if fetch_in.target_en = '1' then
 	    fetch.pc <= fetch_in.target;
 	elsif fetch_in.step = '1' then
-	    fetch.pc <= fetch_in.pc + 4;
+	    fetch.pc <= pc + 4;
 	end if;
     end process;
 

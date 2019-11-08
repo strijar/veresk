@@ -55,76 +55,76 @@ begin
     alu_out <= alu;
 
     process (decode, r1, r2) begin
-	alu.wreg_en <= '0';
-	alu.wdat <= (others => '0');
+	alu.en <= '0';
+	alu.dat <= (others => '0');
 
 	case decode.op is
 	    when RV32I_OP_IMM =>
-		alu.wreg_en <= '1';
+		alu.en <= '1';
 
 		case decode.fn3 is
 		    when RV32_FN3_ADDI =>
-		        alu.wdat <= std_logic_vector(unsigned(r1) + unsigned(decode.imm));
+		        alu.dat <= std_logic_vector(unsigned(r1) + unsigned(decode.imm));
 
 		    when RV32_FN3_SLTI =>
 			if signed(r1) < signed(decode.imm) then
-			    alu.wdat <= x"00000001";
+			    alu.dat <= x"00000001";
 			else
-			    alu.wdat <= x"00000000";
+			    alu.dat <= x"00000000";
 			end if;
 
 		    when RV32_FN3_SLTIU =>
 			if unsigned(r1) < unsigned(decode.imm) then
-			    alu.wdat <= x"00000001";
+			    alu.dat <= x"00000001";
 			else
-			    alu.wdat <= x"00000000";
+			    alu.dat <= x"00000000";
 			end if;
 
 		    when RV32_FN3_ANDI =>
-		        alu.wdat <= r1 and decode.imm;
+		        alu.dat <= r1 and decode.imm;
 
 		    when RV32_FN3_ORI =>
-		        alu.wdat <= r1 or decode.imm;
+		        alu.dat <= r1 or decode.imm;
 
 		    when RV32_FN3_XORI =>
-		        alu.wdat <= r1 xor decode.imm;
+		        alu.dat <= r1 xor decode.imm;
 
 		    when others =>
 		end case;
 
 	    when RV32I_OP_REG =>
-		alu.wreg_en <= '1';
+		alu.en <= '1';
 
 		case decode.fn3 is
 		    when RV32_FN3_ADD =>
 			if decode.fn7 = RV32_FN7_0 then
-		    	    alu.wdat <= std_logic_vector(signed(r1) + signed(r2));
+		    	    alu.dat <= std_logic_vector(signed(r1) + signed(r2));
 		    	else
-		    	    alu.wdat <= std_logic_vector(signed(r1) - signed(r2));
+		    	    alu.dat <= std_logic_vector(signed(r1) - signed(r2));
 		    	end if;
 
 		    when RV32_FN3_SLT =>
 			if signed(r1) < signed(r2) then
-			    alu.wdat <= x"00000001";
+			    alu.dat <= x"00000001";
 			else
-			    alu.wdat <= x"00000000";
+			    alu.dat <= x"00000000";
 			end if;
 
 		    when RV32_FN3_SLTU =>
 			if unsigned(r1) < unsigned(r2) then
-			    alu.wdat <= x"00000001";
+			    alu.dat <= x"00000001";
 			else
-			    alu.wdat <= x"00000000";
+			    alu.dat <= x"00000000";
 			end if;
 
 		    when RV32_FN3_AND =>
-		        alu.wdat <= r1 and r2;
+		        alu.dat <= r1 and r2;
 
 		    when RV32_FN3_OR =>
-		        alu.wdat <= r1 or r2;
+		        alu.dat <= r1 or r2;
 
 		    when RV32_FN3_XOR =>
-		        alu.wdat <= r1 xor r2;
+		        alu.dat <= r1 xor r2;
 
 		    when others =>
 		end case;

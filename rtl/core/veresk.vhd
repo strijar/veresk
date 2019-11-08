@@ -22,6 +22,7 @@ entity veresk is
 end veresk;
 
 architecture rtl of veresk is
+    signal pc			: pc_type;
 
     signal fetch_en		: std_logic := '0';
     signal fetch_in		: fetch_in_type;
@@ -37,24 +38,66 @@ architecture rtl of veresk is
     signal exec, exec_reg	: exec_type;
     signal exec_ready           : std_logic := '0';
 
-    signal rs1_dat, rs2_dat	: cell_type;
-    signal rs1, rs2		: reg_type;
+    signal wreg			: wreg_type;
+
+    signal rs1			: reg_type;
+    signal rs1_bypass		: std_logic;
+    signal rs1_dat, rs1_out	: cell_type;
+
+    signal rs2			: reg_type;
+    signal rs2_bypass		: std_logic;
+    signal rs2_dat, rs2_out	: cell_type;
 
 begin
 
-    fetch_en <= '1' when rst = '0' else '0';
+    fetch_ready <= fetch_en;
+
     decode_en <= '1' when rst = '0' and fetch_ready = '1' else '0';
     exec_en <= '1' when rst = '0' and decode_ready = '1' else '0';
 
-    fetch_in.pc <= fetch_reg.pc;
     fetch_in.step <= '1' when fetch_ready = '1' else '0';
+    fetch_in.target_en <= '0';
+    fetch_in.target <= (others => '0');
+
+    wreg <= exec.wreg;
+
+    rs1_dat <= exec_reg.wreg.dat when rs1_bypass = '1' else rs1_out;
+    rs2_dat <= exec_reg.wreg.dat when rs2_bypass = '1' else rs2_out;
+
+    -- Bypass --
 
     process (clk, rst) begin
 	if rising_edge(clk) then
 	    if rst = '1' then
-	        fetch_reg.pc <= (others => '0');
+		rs1_bypass <= '0';
+		rs2_bypass <= '0';
+	    else
+		rs1_bypass <= '0';
+		rs2_bypass <= '0';
+
+		if wreg.en = '1' then
+		    if wreg.rd = decode.rs1 and decode.req_rs1 = '1' then
+			rs1_bypass <= '1';
+		    end if;
+
+		    if wreg.rd = decode.rs2 and decode.req_rs2 = '1' then
+			rs2_bypass <= '1';
+		    end if;
+		end if;
+	    end if;
+	end if;
+    end process;
+
+    -- Pipe registers --
+
+    process (clk, rst) begin
+	if rising_edge(clk) then
+	    if rst = '1' then
+	        pc <= (others => '0');
+
+		fetch_en <= '0';
 	        fetch_reg.inst <= (others => '0');
-	        fetch_ready <= '0';
+	        fetch_reg.pc <= (others => '0');
 
 		decode_reg.subset <= none;
 		decode_reg.op <= (others => '0');
@@ -64,21 +107,23 @@ begin
 		decode_reg.rs2 <= (others => '0');
 		decode_reg.imm <= (others => '0');
 		decode_reg.fn7 <= (others => '0');
-		decode_reg.hazard_rs1 <= '0';
-		decode_reg.hazard_rs2 <= '0';
+		decode_reg.req_rs1 <= '0';
+		decode_reg.req_rs2 <= '0';
 	        decode_ready <= '0';
 
-		exec_reg.wreg_en <= '0';
-		exec_reg.wreg <= (others => '0');
-		exec_reg.wdat <= (others => '0');
+		exec_reg.wreg.en <= '0';
+		exec_reg.wreg.rd <= (others => '0');
+		exec_reg.wreg.dat <= (others => '0');
 	        exec_ready <= '0';
 	    else
-	        fetch_ready <= fetch_en;
+		fetch_en <= '1';
+
 	        decode_ready <= decode_en;
 	        exec_ready <= exec_en;
 
 	        if fetch_en = '1' then
 		    fetch_reg <= fetch;
+		    pc <= fetch.pc;
 		end if;
 
 	        if decode_en = '1' then
@@ -97,9 +142,11 @@ begin
 
     fetch_i: entity work.veresk_fetch
 	port map(
+	    pc		=> pc,
 	    fetch_in	=> fetch_in,
-	    fetch_out	=> fetch,
 	    ibus_in	=> ibus_in,
+
+	    fetch_out	=> fetch,
 	    ibus_out	=> ibus_out
 	);
 
@@ -111,12 +158,12 @@ begin
 	    r1_in	=> decode.rs1,
 	    r2_in	=> decode.rs2,
 
-	    dat1_out	=> rs1_dat,
-	    dat2_out	=> rs2_dat,
+	    dat1_out	=> rs1_out,
+	    dat2_out	=> rs2_out,
 
-	    wreg_en	=> exec.wreg_en,
-	    wreg_in	=> exec.wreg,
-	    wdat_in	=> exec.wdat
+	    wreg_en	=> wreg.en,
+	    wreg_in	=> wreg.rd,
+	    wdat_in	=> wreg.dat
 	);
 
     decode_i: entity work.veresk_decode
@@ -129,6 +176,7 @@ begin
 	port map(
 	    r1		=> rs1_dat,
 	    r2		=> rs2_dat,
+	    pc		=> fetch_reg.pc,
 	    decode	=> decode_reg,
 
 	    exec_out	=> exec

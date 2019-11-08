@@ -54,7 +54,6 @@ begin
 
     inst <= fetch.inst;
     decode.op <= inst(6 downto 0);
-    decode.pc <= fetch.pc;
 
     with decode.op select decode.subset <=
 	utype	when RV32I_OP_LUI,
@@ -71,15 +70,15 @@ begin
 	jtype	when RV32I_OP_JAL,
 	none	when others;
 
-    process (inst, decode.subset) begin
+    process (inst, decode.subset, decode.rs1, decode.rs2) begin
 	decode.rd <= (others => '0');
 	decode.fn3 <= (others => '0');
 	decode.rs1 <= (others => '0');
 	decode.rs2 <= (others => '0');
 	decode.fn7 <= (others => '0');
 	decode.imm <= (others => '0');
-	decode.hazard_rs1 <= '0';
-	decode.hazard_rs2 <= '0';
+	decode.req_rs1 <= '0';
+	decode.req_rs2 <= '0';
 
 	case decode.subset is
 	    when rtype =>
@@ -88,14 +87,27 @@ begin
 		decode.rs1 <= inst(19 downto 15);
 		decode.rs2 <= inst(24 downto 20);
 		decode.fn7 <= inst(31 downto 25);
-		decode.hazard_rs1 <= '1';
-		decode.hazard_rs1 <= '1';
+
+		decode.req_rs1 <= '1';
+		decode.req_rs2 <= '1';
+
+		if decode.rs1 = REG0 then
+		    decode.req_rs1 <= '0';
+		end if;
+
+		if decode.rs2 = REG0 then
+		    decode.req_rs2 <= '0';
+		end if;
 
 	    when itype =>
 		decode.rd <= inst(11 downto 7);
 		decode.fn3 <= inst(14 downto 12);
 		decode.rs1 <= inst(19 downto 15);
-		decode.hazard_rs1 <= '1';
+		decode.req_rs1 <= '1';
+
+		if decode.rs1 = REG0 then
+		    decode.req_rs1 <= '0';
+		end if;
 
 		decode.imm(11 downto 0) <= inst(31 downto 20);
 		decode.imm(31 downto 12) <= (others => inst(31));
@@ -103,7 +115,11 @@ begin
 	    when stype =>
 		decode.fn3 <= inst(14 downto 12);
 		decode.rs1 <= inst(19 downto 15);
-		decode.hazard_rs1 <= '1';
+		decode.req_rs1 <= '1';
+
+		if decode.rs1 = REG0 then
+		    decode.req_rs1 <= '0';
+		end if;
 
 		decode.imm(4 downto 0) <= inst(11 downto 7);
 		decode.imm(11 downto 5) <= inst(31 downto 25);
@@ -113,8 +129,16 @@ begin
 		decode.fn3 <= inst(14 downto 12);
 		decode.rs1 <= inst(19 downto 15);
 		decode.rs2 <= inst(24 downto 20);
-		decode.hazard_rs1 <= '1';
-		decode.hazard_rs2 <= '1';
+		decode.req_rs1 <= '1';
+		decode.req_rs2 <= '1';
+
+		if decode.rs1 = REG0 then
+		    decode.req_rs1 <= '0';
+		end if;
+
+		if decode.rs2 = REG0 then
+		    decode.req_rs2 <= '0';
+		end if;
 
 		decode.imm(12) <= inst(31);
 		decode.imm(10 downto 5) <= inst(30 downto 25);

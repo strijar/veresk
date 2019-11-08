@@ -41,6 +41,7 @@ entity veresk_exec is
 	decode		: in decode_type;
 	r1		: in cell_type;
 	r2		: in cell_type;
+	pc		: in pc_type;
 
 	exec_out	: out exec_type
     );
@@ -65,46 +66,62 @@ begin
 	);
 
     process (decode, alu, r1, r2) begin
-	exec.wreg_en <= '0';
-	exec.wreg <= (others => '0');
-	exec.wdat <= (others => '0');
+	exec.wreg.en <= '0';
+	exec.wreg.rd <= (others => '0');
+	exec.wreg.dat <= (others => '0');
+
 	exec.target_en <= '0';
 	exec.target <= (others => '0');
 
 	case decode.op is
 	    when RV32I_OP_LUI =>
-		exec.wreg_en <= '1';
-		exec.wreg <= decode.rd;
-		exec.wdat <= decode.imm;
+		exec.wreg.en <= '1';
+		exec.wreg.rd <= decode.rd;
+		exec.wreg.dat <= decode.imm;
 
-	    when RV32I_OP_IMM =>
-		exec.wreg_en <= alu.wreg_en;
-		exec.wreg <= decode.rd;
-		exec.wdat <= alu.wdat;
+		if decode.rd = REG0 then
+		    exec.wreg.en <= '0';
+		end if;
 
-	    when RV32I_OP_REG =>
-		exec.wreg_en <= alu.wreg_en;
-		exec.wreg <= decode.rd;
-		exec.wdat <= alu.wdat;
+	    when RV32I_OP_IMM | RV32I_OP_REG =>
+		exec.wreg.en <= alu.en;
+		exec.wreg.rd <= decode.rd;
+		exec.wreg.dat <= alu.dat;
+
+		if decode.rd = REG0 then
+		    exec.wreg.en <= '0';
+		end if;
 
 	    when RV32I_OP_AUIPC =>
-		exec.wreg_en <= '1';
-		exec.wreg <= decode.rd;
-		exec.wdat <= std_logic_vector(unsigned(decode.pc) + unsigned(decode.imm));
-		
+		exec.wreg.en <= '1';
+		exec.wreg.rd <= decode.rd;
+		exec.wreg.dat <= std_logic_vector(unsigned(pc) + unsigned(decode.imm));
+
+		if decode.rd = REG0 then
+		    exec.wreg.en <= '0';
+		end if;
+
 	    when RV32I_OP_JAL =>
-		exec.wreg_en <= '1';
-		exec.wreg <= decode.rd;
-		exec.wdat <= std_logic_vector(unsigned(decode.pc) + 4);
+		exec.wreg.en <= '1';
+		exec.wreg.rd <= decode.rd;
+		exec.wreg.dat <= std_logic_vector(unsigned(pc) + 4);
 		exec.target_en <= '1';
-		exec.target <= unsigned(signed(decode.pc) + signed(decode.imm));
+		exec.target <= unsigned(signed(pc) + signed(decode.imm));
+
+		if decode.rd = REG0 then
+		    exec.wreg.en <= '0';
+		end if;
 
 	    when RV32I_OP_JALR =>
-		exec.wreg_en <= '1';
-		exec.wreg <= decode.rd;
-		exec.wdat <= std_logic_vector(unsigned(decode.pc) + 4);
+		exec.wreg.en <= '1';
+		exec.wreg.rd <= decode.rd;
+		exec.wreg.dat <= std_logic_vector(unsigned(pc) + 4);
 		exec.target_en <= '1';
 		exec.target <= unsigned(signed(r1) + signed(decode.imm));
+
+		if decode.rd = REG0 then
+		    exec.wreg.en <= '0';
+		end if;
 
 	    when others =>
 	end case;

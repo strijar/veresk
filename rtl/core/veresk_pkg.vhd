@@ -112,7 +112,6 @@ package veresk_pkg is
     subtype pc_type is unsigned(CELL_BITS-1 downto 0);
 
     type fetch_in_type is record
-        pc              : pc_type;
 	step		: std_logic;
 	target_en	: std_logic;
 	target		: pc_type;
@@ -125,6 +124,8 @@ package veresk_pkg is
 
     subtype reg_type is std_logic_vector(4 downto 0);
 
+    constant REG0:		reg_type := b"00000";
+
     type subset_type is (none, rtype, itype, stype, btype, utype, jtype);
 
     type decode_type is record
@@ -136,23 +137,25 @@ package veresk_pkg is
 	rs2		: reg_type;
 	imm		: cell_type;
 	fn7		: op_fn7_type;
-	hazard_rs1	: std_logic;
-	hazard_rs2	: std_logic;
-	pc 		: pc_type;
+	req_rs1		: std_logic;
+	req_rs2		: std_logic;
+    end record;
+
+    type wreg_type is record
+	en		: std_logic;
+	rd		: reg_type;
+	dat		: cell_type;
     end record;
 
     type exec_type is record
-	wreg_en		: std_logic;
-	wreg		: reg_type;
-	wdat		: cell_type;
-
+	wreg		: wreg_type;
 	target_en	: std_logic;
 	target		: pc_type;
     end record;
 
     type alu_type is record
-	wreg_en		: std_logic;
-	wdat		: cell_type;
+	en		: std_logic;
+	dat		: cell_type;
     end record;
 
     -- Vectors
