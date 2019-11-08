@@ -115,10 +115,16 @@ begin
 	    when stype =>
 		decode.fn3 <= inst(14 downto 12);
 		decode.rs1 <= inst(19 downto 15);
+		decode.rs2 <= inst(24 downto 20);
 		decode.req_rs1 <= '1';
+		decode.req_rs2 <= '1';
 
 		if decode.rs1 = REG0 then
 		    decode.req_rs1 <= '0';
+		end if;
+
+		if decode.rs2 = REG0 then
+		    decode.req_rs2 <= '0';
 		end if;
 
 		decode.imm(4 downto 0) <= inst(11 downto 7);

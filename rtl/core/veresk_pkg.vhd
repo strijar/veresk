@@ -58,12 +58,12 @@ package veresk_pkg is
 
     constant RV32_REG_ZERO:		std_logic_vector := "00000";
 
-    subtype op_mem_type is std_logic_vector(1 downto 0);
+    subtype op_mem_type is std_logic_vector(2 downto 0);
 
-    constant RV32_MEM_SIZE_B:		op_mem_type := "00";
-    constant RV32_MEM_SIZE_H:		op_mem_type := "01";
-    constant RV32_MEM_SIZE_W:		op_mem_type := "10";
-    constant RV32_MEM_SIZE_D:		op_mem_type := "11";
+    constant RV32_MEM_SIZE_B:		op_mem_type := "000";
+    constant RV32_MEM_SIZE_H:		op_mem_type := "001";
+    constant RV32_MEM_SIZE_W:		op_mem_type := "010";
+    constant RV32_MEM_SIZE_D:		op_mem_type := "011";
 
     subtype op_test_type is std_logic_vector(2 downto 0);
 
@@ -78,6 +78,7 @@ package veresk_pkg is
     constant CELL_BITS: 		integer := 32;
 
     subtype cell_type is std_logic_vector(CELL_BITS-1 downto 0);
+    subtype pc_type is unsigned(CELL_BITS-1 downto 0);
 
     -- Instruction bus
 
@@ -109,7 +110,6 @@ package veresk_pkg is
 	ibus_out	: ibus_out_type;
     end record;
 
-    subtype pc_type is unsigned(CELL_BITS-1 downto 0);
 
     type fetch_in_type is record
 	step		: std_logic;
@@ -151,6 +151,7 @@ package veresk_pkg is
 	wreg		: wreg_type;
 	target_en	: std_logic;
 	target		: pc_type;
+	dbus_out	: dbus_out_type;
     end record;
 
     type alu_type is record

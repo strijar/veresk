@@ -9,6 +9,7 @@ SRC = \
     ../core/veresk_regs.vhd\
     ../core/veresk_alu.vhd\
     ../core/veresk_exec.vhd\
+    ../core/veresk_mem.vhd\
     ../core/veresk.vhd\
     tb_veresk.vhd\
     ram_addi.vhd
@@ -20,6 +21,7 @@ OBJS = \
     work/veresk_regs.o \
     work/veresk_alu.o \
     work/veresk_exec.o \
+    work/veresk_mem.o \
     work/veresk.o \
     work/ram_addi.o \
     work/tb_veresk.o

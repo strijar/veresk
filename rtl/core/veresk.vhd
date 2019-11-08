@@ -182,4 +182,10 @@ begin
 	    exec_out	=> exec
 	);
 
+    mem_i: entity work.veresk_mem
+	port map(
+	    exec	=> exec_reg,
+	    data_out	=> data_out
+	);
+
 end;

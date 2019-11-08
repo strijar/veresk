@@ -73,6 +73,10 @@ begin
 	exec.target_en <= '0';
 	exec.target <= (others => '0');
 
+	exec.dbus_out.addr <= (others => '0');
+	exec.dbus_out.dat <= (others => '0');
+	exec.dbus_out.we <= b"0000";
+
 	case decode.op is
 	    when RV32I_OP_LUI =>
 		exec.wreg.en <= '1';
@@ -122,6 +126,18 @@ begin
 		if decode.rd = REG0 then
 		    exec.wreg.en <= '0';
 		end if;
+
+	    when RV32I_OP_STORE =>
+		exec.dbus_out.addr <= std_logic_vector(unsigned(signed(r1) + signed(decode.imm)));
+		exec.dbus_out.dat <= r2;
+
+		case decode.fn3 is
+		    when RV32_MEM_SIZE_B => exec.dbus_out.we <= b"0001";
+		    when RV32_MEM_SIZE_H => exec.dbus_out.we <= b"0011";
+		    when RV32_MEM_SIZE_W => exec.dbus_out.we <= b"1111";
+
+		    when others =>
+		end case;
 
 	    when others =>
 	end case;
