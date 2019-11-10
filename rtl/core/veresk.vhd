@@ -114,6 +114,10 @@ begin
 		exec_reg.wreg.en <= '0';
 		exec_reg.wreg.rd <= (others => '0');
 		exec_reg.wreg.dat <= (others => '0');
+		exec_reg.target_en <= '0';
+		exec_reg.dbus_out.we <= (others => '0');
+		exec_reg.dbus_out.dat <= (others => '0');
+		exec_reg.dbus_out.addr <= (others => '0');
 	        exec_ready <= '0';
 	    else
 		fetch_en <= '1';

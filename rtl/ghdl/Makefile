@@ -12,7 +12,7 @@ SRC = \
     ../core/veresk_mem.vhd\
     ../core/veresk.vhd\
     tb_veresk.vhd\
-    ram_addi.vhd
+    ram.vhd
 
 OBJS = \
     work/veresk_pkg.o \
@@ -23,7 +23,7 @@ OBJS = \
     work/veresk_exec.o \
     work/veresk_mem.o \
     work/veresk.o \
-    work/ram_addi.o \
+    work/ram.o \
     work/tb_veresk.o
 
 all: tb_veresk
