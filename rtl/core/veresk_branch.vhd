@@ -36,37 +36,80 @@ use ieee.numeric_std.all;
 library work;
 use work.veresk_pkg.all;
 
-entity veresk_fetch is
+entity veresk_branch is
     port (
-	pc		: in pc_type;
-	fetch_in	: in fetch_in_type;
-	ibus_in		: in ibus_in_type;
+	decode		: in decode_type;
+	r1		: in cell_type;
+	r2		: in cell_type;
 
-	fetch_out	: out fetch_out_type;
-	ibus_out	: out ibus_out_type
+	branch_out	: out branch_type
     );
-end veresk_fetch;
+end veresk_branch;
 
-architecture rtl of veresk_fetch is
+architecture rtl of veresk_branch is
 
-    signal fetch        : fetch_out_type;
+    signal branch	: branch_type;
 
 begin
 
-    fetch_out <= fetch;
+    branch_out <= branch;
+    branch.addr <= unsigned(signed(decode.pc) + signed(decode.imm));
 
-    ibus_out.addr <= std_logic_vector(fetch.pc_next);
-    fetch.inst <= ibus_in.dat;
-    fetch.pc <= pc when fetch_in.target_en = '0' else fetch_in.target;
+    process (decode, r1, r2) begin
+	branch.taken <= '0';
+	branch.ignore <= '0';
 
-    process (fetch_in, pc) begin
-        fetch.pc_next <= pc;
+	case decode.op is
+	    when RV32I_OP_BRANCH =>
+		case decode.fn3 is
+		    when RV32_TEST_EQ =>
+			if r1 = r2 then
+			    branch.taken <= '1';
+			else
+			    branch.ignore <= '1';
+			end if;
 
-	if fetch_in.target_en = '1' then
-	    fetch.pc_next <= fetch_in.target;
-	elsif fetch_in.step = '1' then
-	    fetch.pc_next <= pc + 4;
-	end if;
+		    when RV32_TEST_NE =>
+			if r1 /= r2 then
+			    branch.taken <= '1';
+			else
+			    branch.ignore <= '1';
+			end if;
+
+		    when RV32_TEST_LT =>
+			if signed(r1) < signed(r2) then
+			    branch.taken <= '1';
+			else
+			    branch.ignore <= '1';
+			end if;
+
+		    when RV32_TEST_GE =>
+			if signed(r1) > signed(r2) then
+			    branch.taken <= '1';
+			else
+			    branch.ignore <= '1';
+			end if;
+
+		    when RV32_TEST_LTU =>
+			if unsigned(r1) < unsigned(r2) then
+			    branch.taken <= '1';
+			else
+			    branch.ignore <= '1';
+			end if;
+
+		    when RV32_TEST_GEU =>
+			if unsigned(r1) > unsigned(r2) then
+			    branch.taken <= '1';
+			else
+			    branch.ignore <= '1';
+			end if;
+
+		    when others =>
+		end case;
+
+	    when others =>
+	end case;
+
     end process;
 
 end;

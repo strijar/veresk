@@ -69,7 +69,6 @@ package veresk_pkg is
 
     constant RV32_TEST_EQ:		op_test_type := "000";
     constant RV32_TEST_NE:		op_test_type := "001";
-    constant RV32_TEST_ALWAYS:		op_test_type := "010";
     constant RV32_TEST_LT:		op_test_type := "100";
     constant RV32_TEST_GE:		op_test_type := "101";
     constant RV32_TEST_LTU:		op_test_type := "110";
@@ -110,7 +109,6 @@ package veresk_pkg is
 	ibus_out	: ibus_out_type;
     end record;
 
-
     type fetch_in_type is record
 	step		: std_logic;
 	target_en	: std_logic;
@@ -120,6 +118,7 @@ package veresk_pkg is
     type fetch_out_type is record
 	inst		: cell_type;
 	pc		: pc_type;
+	pc_next		: pc_type;
     end record;
 
     subtype reg_type is std_logic_vector(4 downto 0);
@@ -129,6 +128,7 @@ package veresk_pkg is
     type subset_type is (none, rtype, itype, stype, btype, utype, jtype);
 
     type decode_type is record
+	pc		: pc_type;
 	subset		: subset_type;
 	op		: op_type;
 	rd		: reg_type;
@@ -139,6 +139,7 @@ package veresk_pkg is
 	fn7		: op_fn7_type;
 	req_rs1		: std_logic;
 	req_rs2		: std_logic;
+	jump		: std_logic;
     end record;
 
     type wreg_type is record
@@ -149,9 +150,16 @@ package veresk_pkg is
 
     type exec_type is record
 	wreg		: wreg_type;
-	target_en	: std_logic;
+	target_taken	: std_logic;
+	target_ignore	: std_logic;
 	target		: pc_type;
 	dbus_out	: dbus_out_type;
+    end record;
+
+    type branch_type is record
+	taken		: std_logic;
+	ignore		: std_logic;
+	addr		: pc_type;
     end record;
 
     type alu_type is record

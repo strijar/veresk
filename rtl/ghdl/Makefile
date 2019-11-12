@@ -1,6 +1,6 @@
 GHDL=ghdl
 GHDLFLAGS= --std=93 --ieee=synopsys --workdir=work
-GHDLRUNFLAGS=--wave=tb_veresk.ghw --stop-time=1us
+GHDLRUNFLAGS=--wave=tb_veresk.ghw --stop-time=2us
 
 SRC = \
     ../core/veresk_pkg.vhd\
@@ -8,6 +8,7 @@ SRC = \
     ../core/veresk_decode.vhd\
     ../core/veresk_regs.vhd\
     ../core/veresk_alu.vhd\
+    ../core/veresk_branch.vhd\
     ../core/veresk_exec.vhd\
     ../core/veresk_mem.vhd\
     ../core/veresk.vhd\
@@ -20,6 +21,7 @@ OBJS = \
     work/veresk_decode.o \
     work/veresk_regs.o \
     work/veresk_alu.o \
+    work/veresk_branch.o \
     work/veresk_exec.o \
     work/veresk_mem.o \
     work/veresk.o \

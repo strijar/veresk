@@ -54,6 +54,7 @@ begin
 
     inst <= fetch.inst;
     decode.op <= inst(6 downto 0);
+    decode.pc <= fetch.pc;
 
     with decode.op select decode.subset <=
 	utype	when RV32I_OP_LUI,
@@ -69,6 +70,12 @@ begin
 	utype	when RV32I_OP_AUIPC,
 	jtype	when RV32I_OP_JAL,
 	none	when others;
+
+    with decode.op select decode.jump <=
+	'1'	when RV32I_OP_JALR,
+	'1'	when RV32I_OP_BRANCH,
+	'1'	when RV32I_OP_JAL,
+	'0'	when others;
 
     process (inst, decode.subset, decode.rs1, decode.rs2) begin
 	decode.rd <= (others => '0');
@@ -159,7 +166,7 @@ begin
 	    when jtype =>
 		decode.rd <= inst(11 downto 7);
 
-		decode.imm(20) <= inst(31);
+		decode.imm(31 downto 20) <= (others =>  inst(31));
 		decode.imm(10 downto 1) <= inst(30 downto 21);
 		decode.imm(11 downto 11) <= inst(20 downto 20);
 		decode.imm(19 downto 12) <= inst(19 downto 12);
