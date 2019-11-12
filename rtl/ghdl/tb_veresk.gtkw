@@ -1,21 +1,23 @@
 [*]
 [*] GTKWave Analyzer v3.3.79 (w)1999-2017 BSI
-[*] Tue Nov 12 08:18:07 2019
+[*] Tue Nov 12 10:10:22 2019
 [*]
 [dumpfile] "/home/master/fpga/veresk/rtl/ghdl/tb_veresk.ghw"
-[dumpfile_mtime] "Tue Nov 12 08:16:44 2019"
-[dumpfile_size] 1123142
+[dumpfile_mtime] "Tue Nov 12 09:00:23 2019"
+[dumpfile_size] 1123866
 [savefile] "/home/master/fpga/veresk/rtl/ghdl/tb_veresk.gtkw"
-[timestart] 0
+[timestart] 1161400000
 [size] 1920 1020
 [pos] -1 -1
-*-25.000000 1255200000 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+*-25.000000 1246400000 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
 [treeopen] top.
 [treeopen] top.tb_veresk.
+[treeopen] top.tb_veresk.cpu.
 [treeopen] top.tb_veresk.cpu.exec_reg.dbus_out.
 [treeopen] top.tb_veresk.cpu.exec_reg.wreg.
 [treeopen] top.tb_veresk.cpu.fetch_in.
 [treeopen] top.tb_veresk.cpu.fetch_reg.
+[treeopen] top.tb_veresk.cpu.regs_i.
 [treeopen] top.tb_veresk.cpu.regs_i.regs.
 [sst_width] 228
 [signals_width] 342
