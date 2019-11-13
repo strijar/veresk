@@ -125,11 +125,8 @@ package veresk_pkg is
 
     constant REG0:		reg_type := b"00000";
 
-    type subset_type is (none, rtype, itype, stype, btype, utype, jtype);
-
     type decode_type is record
 	pc		: pc_type;
-	subset		: subset_type;
 	op		: op_type;
 	rd		: reg_type;
 	fn3		: op_fn3_type;
@@ -139,9 +136,6 @@ package veresk_pkg is
 	fn7		: op_fn7_type;
 	req_rs1		: std_logic;
 	req_rs2		: std_logic;
-
-	jump		: std_logic;
-	branch		: std_logic;
     end record;
 
     type wreg_type is record

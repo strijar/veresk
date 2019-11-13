@@ -46,8 +46,11 @@ end veresk_decode;
 
 architecture rtl of veresk_decode is
 
+    type subset_type is (none, rtype, itype, stype, btype, utype, jtype);
+
     signal decode	: decode_type;
     signal op		: op_type;
+    signal subset	: subset_type;
 
 begin
     decode_out <= decode;
@@ -55,7 +58,7 @@ begin
     decode.op <= inst(6 downto 0);
     decode.pc <= pc;
 
-    with decode.op select decode.subset <=
+    with decode.op select subset <=
 	utype	when RV32I_OP_LUI,
 	itype	when RV32I_OP_IMM,
 
@@ -70,16 +73,7 @@ begin
 	jtype	when RV32I_OP_JAL,
 	none	when others;
 
-    with decode.op select decode.jump <=
-	'1'	when RV32I_OP_JALR,
-	'1'	when RV32I_OP_JAL,
-	'0'	when others;
-
-    with decode.op select decode.branch <=
-	'1'	when RV32I_OP_BRANCH,
-	'0'	when others;
-
-    process (inst, decode.subset, decode.rs1, decode.rs2) begin
+    process (inst, subset, decode.rs1, decode.rs2) begin
 	decode.rd <= (others => '0');
 	decode.fn3 <= (others => '0');
 	decode.rs1 <= (others => '0');
@@ -89,7 +83,7 @@ begin
 	decode.req_rs1 <= '0';
 	decode.req_rs2 <= '0';
 
-	case decode.subset is
+	case subset is
 	    when rtype =>
 		decode.rd <= inst(11 downto 7);
 		decode.fn3 <= inst(14 downto 12);

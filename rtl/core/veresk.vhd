@@ -24,7 +24,7 @@ end veresk;
 architecture rtl of veresk is
     signal pc			: pc_type;
 
-    type stall_type is (none, jump1, jump2, delay);
+    type stall_type is (none, jump, delay);
 
     signal stall, stall_reg	: stall_type;
 
@@ -67,35 +67,28 @@ begin
 
     process (decode_reg, exec, stall_reg) begin
 	case stall_reg is
-	    when none | delay =>
-		if decode_reg.jump = '1' then
-		    stall <= jump2;
-		elsif decode_reg.branch = '1' then
-		    if exec.target_taken = '1' then
-			stall <= jump2;
-		    else
-			stall <= delay;
-		    end if;
+	    when none =>
+		if exec.target_taken = '1' then
+		    stall <= jump;
 		else
 		    stall <= none;
 		end if;
 
-	    when jump1 =>
-		stall <= none;
+	    when jump =>
+		stall <= delay;
 
-	    when jump2 =>
-		stall <= jump1;
+	    when delay =>
+		stall <= none;
 	end case;
     end process;
 
     with stall select fetch_in.step <=
 	'1' when none,
-	'1' when jump1,
+	'1' when delay,
 	'0' when others;
 
     with stall select decode_stall <=
 	'0' when none,
-	'0' when delay,
 	'1' when others;
 
     -- Bypass --
@@ -146,7 +139,6 @@ begin
 		    decode_reg.pc <= (others => '0');
 		end if;
 
-		decode_reg.subset <= none;
 		decode_reg.op <= (others => '0');
 		decode_reg.rd <= (others => '0');
 		decode_reg.fn3 <= (others => '0');
@@ -156,8 +148,6 @@ begin
 		decode_reg.fn7 <= (others => '0');
 		decode_reg.req_rs1 <= '0';
 		decode_reg.req_rs2 <= '0';
-		decode_reg.jump <= '0';
-		decode_reg.branch <= '0';
 	    else
 		decode_reg <= decode;
 	    end if;
