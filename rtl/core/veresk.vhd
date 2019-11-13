@@ -39,11 +39,11 @@ architecture rtl of veresk is
     signal wreg			: wreg_type;
 
     signal rs1			: reg_type;
-    signal rs1_bypass		: std_logic;
+    signal rs1_bypass, rs1_load	: std_logic;
     signal rs1_dat, rs1_out	: cell_type;
 
     signal rs2			: reg_type;
-    signal rs2_bypass		: std_logic;
+    signal rs2_bypass, rs2_load	: std_logic;
     signal rs2_dat, rs2_out	: cell_type;
 
 begin
@@ -93,8 +93,15 @@ begin
 
     -- Bypass --
 
-    rs1_dat <= exec_reg.wreg.dat when rs1_bypass = '1' else rs1_out;
-    rs2_dat <= exec_reg.wreg.dat when rs2_bypass = '1' else rs2_out;
+    rs1_dat <=
+	exec_reg.wreg.dat when rs1_bypass = '1' else
+	data_in.dat when rs1_load = '1'
+	else rs1_out;
+
+    rs2_dat <=
+	exec_reg.wreg.dat when rs2_bypass = '1' else
+	data_in.dat when rs2_load = '1'
+	else rs2_out;
 
     process (clk, rst) begin
 	if rising_edge(clk) then
@@ -112,6 +119,28 @@ begin
 
 		    if wreg.rd = decode.rs2 and decode.req_rs2 = '1' then
 			rs2_bypass <= '1';
+		    end if;
+		end if;
+	    end if;
+	end if;
+    end process;
+
+    process (clk, rst) begin
+	if rising_edge(clk) then
+	    if rst = '1' then
+		rs1_load <= '0';
+		rs2_load <= '0';
+	    else
+		rs1_load <= '0';
+		rs2_load <= '0';
+
+		if exec_reg.mem_out.re = '1' then
+		    if exec_reg.mem_out.rd = decode.rs1 and decode.req_rs1 = '1' then
+			rs1_load <= '1';
+		    end if;
+
+		    if exec_reg.mem_out.rd = decode.rs2 and decode.req_rs2 = '1' then
+			rs2_load <= '1';
 		    end if;
 		end if;
 	    end if;
@@ -165,9 +194,11 @@ begin
 		exec_reg.target_taken <= '0';
 		exec_reg.target <= (others => '0');
 		exec_reg.mem_out.we <= '0';
+		exec_reg.mem_out.re <= '0';
 		exec_reg.mem_out.size <= (others => '0');
 		exec_reg.mem_out.dat <= (others => '0');
 		exec_reg.mem_out.addr <= (others => '0');
+		exec_reg.mem_out.rd <= (others => '0');
 	    else
 		exec_reg <= exec;
 	    end if;

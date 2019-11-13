@@ -1,26 +1,29 @@
 [*]
 [*] GTKWave Analyzer v3.3.79 (w)1999-2017 BSI
-[*] Wed Nov 13 10:58:18 2019
+[*] Wed Nov 13 14:40:46 2019
 [*]
 [dumpfile] "/home/master/fpga/veresk/rtl/ghdl/tb_veresk.ghw"
-[dumpfile_mtime] "Wed Nov 13 10:57:55 2019"
-[dumpfile_size] 1179147
+[dumpfile_mtime] "Wed Nov 13 14:38:40 2019"
+[dumpfile_size] 1111799
 [savefile] "/home/master/fpga/veresk/rtl/ghdl/tb_veresk.gtkw"
-[timestart] 3770100000
+[timestart] 0
 [size] 1920 1020
 [pos] -1 -1
-*-25.000000 55300000 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+*-25.000000 124600000 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
 [treeopen] top.
 [treeopen] top.tb_veresk.
 [treeopen] top.tb_veresk.cpu.
-[treeopen] top.tb_veresk.cpu.decode_reg.
 [treeopen] top.tb_veresk.cpu.exec.mem_out.
-[treeopen] top.tb_veresk.cpu.exec_reg.
+[treeopen] top.tb_veresk.cpu.exec_i.branch_i.
+[treeopen] top.tb_veresk.cpu.exec_i.branch_i.branch_out.
 [treeopen] top.tb_veresk.cpu.exec_reg.mem_out.
 [treeopen] top.tb_veresk.cpu.exec_reg.wreg.
 [treeopen] top.tb_veresk.cpu.mem_i.data_out.
 [treeopen] top.tb_veresk.cpu.mem_i.mem_in.
 [treeopen] top.tb_veresk.cpu.regs_i.regs.
+[treeopen] top.tb_veresk.ibus_in.
+[treeopen] top.tb_veresk.ram_i.
+[treeopen] top.tb_veresk.ram_i.ram.
 [sst_width] 228
 [signals_width] 272
 [sst_expanded] 1
@@ -35,16 +38,20 @@ top.tb_veresk.reset
 @22
 #{top.tb_veresk.ibus_out.addr[31:0]} top.tb_veresk.ibus_out.addr[31] top.tb_veresk.ibus_out.addr[30] top.tb_veresk.ibus_out.addr[29] top.tb_veresk.ibus_out.addr[28] top.tb_veresk.ibus_out.addr[27] top.tb_veresk.ibus_out.addr[26] top.tb_veresk.ibus_out.addr[25] top.tb_veresk.ibus_out.addr[24] top.tb_veresk.ibus_out.addr[23] top.tb_veresk.ibus_out.addr[22] top.tb_veresk.ibus_out.addr[21] top.tb_veresk.ibus_out.addr[20] top.tb_veresk.ibus_out.addr[19] top.tb_veresk.ibus_out.addr[18] top.tb_veresk.ibus_out.addr[17] top.tb_veresk.ibus_out.addr[16] top.tb_veresk.ibus_out.addr[15] top.tb_veresk.ibus_out.addr[14] top.tb_veresk.ibus_out.addr[13] top.tb_veresk.ibus_out.addr[12] top.tb_veresk.ibus_out.addr[11] top.tb_veresk.ibus_out.addr[10] top.tb_veresk.ibus_out.addr[9] top.tb_veresk.ibus_out.addr[8] top.tb_veresk.ibus_out.addr[7] top.tb_veresk.ibus_out.addr[6] top.tb_veresk.ibus_out.addr[5] top.tb_veresk.ibus_out.addr[4] top.tb_veresk.ibus_out.addr[3] top.tb_veresk.ibus_out.addr[2] top.tb_veresk.ibus_out.addr[1] top.tb_veresk.ibus_out.addr[0]
 #{top.tb_veresk.ibus_in.dat[31:0]} top.tb_veresk.ibus_in.dat[31] top.tb_veresk.ibus_in.dat[30] top.tb_veresk.ibus_in.dat[29] top.tb_veresk.ibus_in.dat[28] top.tb_veresk.ibus_in.dat[27] top.tb_veresk.ibus_in.dat[26] top.tb_veresk.ibus_in.dat[25] top.tb_veresk.ibus_in.dat[24] top.tb_veresk.ibus_in.dat[23] top.tb_veresk.ibus_in.dat[22] top.tb_veresk.ibus_in.dat[21] top.tb_veresk.ibus_in.dat[20] top.tb_veresk.ibus_in.dat[19] top.tb_veresk.ibus_in.dat[18] top.tb_veresk.ibus_in.dat[17] top.tb_veresk.ibus_in.dat[16] top.tb_veresk.ibus_in.dat[15] top.tb_veresk.ibus_in.dat[14] top.tb_veresk.ibus_in.dat[13] top.tb_veresk.ibus_in.dat[12] top.tb_veresk.ibus_in.dat[11] top.tb_veresk.ibus_in.dat[10] top.tb_veresk.ibus_in.dat[9] top.tb_veresk.ibus_in.dat[8] top.tb_veresk.ibus_in.dat[7] top.tb_veresk.ibus_in.dat[6] top.tb_veresk.ibus_in.dat[5] top.tb_veresk.ibus_in.dat[4] top.tb_veresk.ibus_in.dat[3] top.tb_veresk.ibus_in.dat[2] top.tb_veresk.ibus_in.dat[1] top.tb_veresk.ibus_in.dat[0]
-#{top.tb_veresk.ram_i.ram[0][31:0]} top.tb_veresk.ram_i.ram[0][31] top.tb_veresk.ram_i.ram[0][30] top.tb_veresk.ram_i.ram[0][29] top.tb_veresk.ram_i.ram[0][28] top.tb_veresk.ram_i.ram[0][27] top.tb_veresk.ram_i.ram[0][26] top.tb_veresk.ram_i.ram[0][25] top.tb_veresk.ram_i.ram[0][24] top.tb_veresk.ram_i.ram[0][23] top.tb_veresk.ram_i.ram[0][22] top.tb_veresk.ram_i.ram[0][21] top.tb_veresk.ram_i.ram[0][20] top.tb_veresk.ram_i.ram[0][19] top.tb_veresk.ram_i.ram[0][18] top.tb_veresk.ram_i.ram[0][17] top.tb_veresk.ram_i.ram[0][16] top.tb_veresk.ram_i.ram[0][15] top.tb_veresk.ram_i.ram[0][14] top.tb_veresk.ram_i.ram[0][13] top.tb_veresk.ram_i.ram[0][12] top.tb_veresk.ram_i.ram[0][11] top.tb_veresk.ram_i.ram[0][10] top.tb_veresk.ram_i.ram[0][9] top.tb_veresk.ram_i.ram[0][8] top.tb_veresk.ram_i.ram[0][7] top.tb_veresk.ram_i.ram[0][6] top.tb_veresk.ram_i.ram[0][5] top.tb_veresk.ram_i.ram[0][4] top.tb_veresk.ram_i.ram[0][3] top.tb_veresk.ram_i.ram[0][2] top.tb_veresk.ram_i.ram[0][1] top.tb_veresk.ram_i.ram[0][0]
+#{top.tb_veresk.ram_i.ram[13][31:0]} top.tb_veresk.ram_i.ram[13][31] top.tb_veresk.ram_i.ram[13][30] top.tb_veresk.ram_i.ram[13][29] top.tb_veresk.ram_i.ram[13][28] top.tb_veresk.ram_i.ram[13][27] top.tb_veresk.ram_i.ram[13][26] top.tb_veresk.ram_i.ram[13][25] top.tb_veresk.ram_i.ram[13][24] top.tb_veresk.ram_i.ram[13][23] top.tb_veresk.ram_i.ram[13][22] top.tb_veresk.ram_i.ram[13][21] top.tb_veresk.ram_i.ram[13][20] top.tb_veresk.ram_i.ram[13][19] top.tb_veresk.ram_i.ram[13][18] top.tb_veresk.ram_i.ram[13][17] top.tb_veresk.ram_i.ram[13][16] top.tb_veresk.ram_i.ram[13][15] top.tb_veresk.ram_i.ram[13][14] top.tb_veresk.ram_i.ram[13][13] top.tb_veresk.ram_i.ram[13][12] top.tb_veresk.ram_i.ram[13][11] top.tb_veresk.ram_i.ram[13][10] top.tb_veresk.ram_i.ram[13][9] top.tb_veresk.ram_i.ram[13][8] top.tb_veresk.ram_i.ram[13][7] top.tb_veresk.ram_i.ram[13][6] top.tb_veresk.ram_i.ram[13][5] top.tb_veresk.ram_i.ram[13][4] top.tb_veresk.ram_i.ram[13][3] top.tb_veresk.ram_i.ram[13][2] top.tb_veresk.ram_i.ram[13][1] top.tb_veresk.ram_i.ram[13][0]
+#{top.tb_veresk.ram_i.ram[14][31:0]} top.tb_veresk.ram_i.ram[14][31] top.tb_veresk.ram_i.ram[14][30] top.tb_veresk.ram_i.ram[14][29] top.tb_veresk.ram_i.ram[14][28] top.tb_veresk.ram_i.ram[14][27] top.tb_veresk.ram_i.ram[14][26] top.tb_veresk.ram_i.ram[14][25] top.tb_veresk.ram_i.ram[14][24] top.tb_veresk.ram_i.ram[14][23] top.tb_veresk.ram_i.ram[14][22] top.tb_veresk.ram_i.ram[14][21] top.tb_veresk.ram_i.ram[14][20] top.tb_veresk.ram_i.ram[14][19] top.tb_veresk.ram_i.ram[14][18] top.tb_veresk.ram_i.ram[14][17] top.tb_veresk.ram_i.ram[14][16] top.tb_veresk.ram_i.ram[14][15] top.tb_veresk.ram_i.ram[14][14] top.tb_veresk.ram_i.ram[14][13] top.tb_veresk.ram_i.ram[14][12] top.tb_veresk.ram_i.ram[14][11] top.tb_veresk.ram_i.ram[14][10] top.tb_veresk.ram_i.ram[14][9] top.tb_veresk.ram_i.ram[14][8] top.tb_veresk.ram_i.ram[14][7] top.tb_veresk.ram_i.ram[14][6] top.tb_veresk.ram_i.ram[14][5] top.tb_veresk.ram_i.ram[14][4] top.tb_veresk.ram_i.ram[14][3] top.tb_veresk.ram_i.ram[14][2] top.tb_veresk.ram_i.ram[14][1] top.tb_veresk.ram_i.ram[14][0]
+#{top.tb_veresk.ram_i.ram[15][31:0]} top.tb_veresk.ram_i.ram[15][31] top.tb_veresk.ram_i.ram[15][30] top.tb_veresk.ram_i.ram[15][29] top.tb_veresk.ram_i.ram[15][28] top.tb_veresk.ram_i.ram[15][27] top.tb_veresk.ram_i.ram[15][26] top.tb_veresk.ram_i.ram[15][25] top.tb_veresk.ram_i.ram[15][24] top.tb_veresk.ram_i.ram[15][23] top.tb_veresk.ram_i.ram[15][22] top.tb_veresk.ram_i.ram[15][21] top.tb_veresk.ram_i.ram[15][20] top.tb_veresk.ram_i.ram[15][19] top.tb_veresk.ram_i.ram[15][18] top.tb_veresk.ram_i.ram[15][17] top.tb_veresk.ram_i.ram[15][16] top.tb_veresk.ram_i.ram[15][15] top.tb_veresk.ram_i.ram[15][14] top.tb_veresk.ram_i.ram[15][13] top.tb_veresk.ram_i.ram[15][12] top.tb_veresk.ram_i.ram[15][11] top.tb_veresk.ram_i.ram[15][10] top.tb_veresk.ram_i.ram[15][9] top.tb_veresk.ram_i.ram[15][8] top.tb_veresk.ram_i.ram[15][7] top.tb_veresk.ram_i.ram[15][6] top.tb_veresk.ram_i.ram[15][5] top.tb_veresk.ram_i.ram[15][4] top.tb_veresk.ram_i.ram[15][3] top.tb_veresk.ram_i.ram[15][2] top.tb_veresk.ram_i.ram[15][1] top.tb_veresk.ram_i.ram[15][0]
+#{top.tb_veresk.ram_i.ram[16][31:0]} top.tb_veresk.ram_i.ram[16][31] top.tb_veresk.ram_i.ram[16][30] top.tb_veresk.ram_i.ram[16][29] top.tb_veresk.ram_i.ram[16][28] top.tb_veresk.ram_i.ram[16][27] top.tb_veresk.ram_i.ram[16][26] top.tb_veresk.ram_i.ram[16][25] top.tb_veresk.ram_i.ram[16][24] top.tb_veresk.ram_i.ram[16][23] top.tb_veresk.ram_i.ram[16][22] top.tb_veresk.ram_i.ram[16][21] top.tb_veresk.ram_i.ram[16][20] top.tb_veresk.ram_i.ram[16][19] top.tb_veresk.ram_i.ram[16][18] top.tb_veresk.ram_i.ram[16][17] top.tb_veresk.ram_i.ram[16][16] top.tb_veresk.ram_i.ram[16][15] top.tb_veresk.ram_i.ram[16][14] top.tb_veresk.ram_i.ram[16][13] top.tb_veresk.ram_i.ram[16][12] top.tb_veresk.ram_i.ram[16][11] top.tb_veresk.ram_i.ram[16][10] top.tb_veresk.ram_i.ram[16][9] top.tb_veresk.ram_i.ram[16][8] top.tb_veresk.ram_i.ram[16][7] top.tb_veresk.ram_i.ram[16][6] top.tb_veresk.ram_i.ram[16][5] top.tb_veresk.ram_i.ram[16][4] top.tb_veresk.ram_i.ram[16][3] top.tb_veresk.ram_i.ram[16][2] top.tb_veresk.ram_i.ram[16][1] top.tb_veresk.ram_i.ram[16][0]
 @1000200
 -IMem
-@c00200
+@800200
 -DMem
 @22
 #{top.tb_veresk.data_out.addr[31:0]} top.tb_veresk.data_out.addr[31] top.tb_veresk.data_out.addr[30] top.tb_veresk.data_out.addr[29] top.tb_veresk.data_out.addr[28] top.tb_veresk.data_out.addr[27] top.tb_veresk.data_out.addr[26] top.tb_veresk.data_out.addr[25] top.tb_veresk.data_out.addr[24] top.tb_veresk.data_out.addr[23] top.tb_veresk.data_out.addr[22] top.tb_veresk.data_out.addr[21] top.tb_veresk.data_out.addr[20] top.tb_veresk.data_out.addr[19] top.tb_veresk.data_out.addr[18] top.tb_veresk.data_out.addr[17] top.tb_veresk.data_out.addr[16] top.tb_veresk.data_out.addr[15] top.tb_veresk.data_out.addr[14] top.tb_veresk.data_out.addr[13] top.tb_veresk.data_out.addr[12] top.tb_veresk.data_out.addr[11] top.tb_veresk.data_out.addr[10] top.tb_veresk.data_out.addr[9] top.tb_veresk.data_out.addr[8] top.tb_veresk.data_out.addr[7] top.tb_veresk.data_out.addr[6] top.tb_veresk.data_out.addr[5] top.tb_veresk.data_out.addr[4] top.tb_veresk.data_out.addr[3] top.tb_veresk.data_out.addr[2] top.tb_veresk.data_out.addr[1] top.tb_veresk.data_out.addr[0]
-#{top.tb_veresk.data_out.dat[31:0]} top.tb_veresk.data_out.dat[31] top.tb_veresk.data_out.dat[30] top.tb_veresk.data_out.dat[29] top.tb_veresk.data_out.dat[28] top.tb_veresk.data_out.dat[27] top.tb_veresk.data_out.dat[26] top.tb_veresk.data_out.dat[25] top.tb_veresk.data_out.dat[24] top.tb_veresk.data_out.dat[23] top.tb_veresk.data_out.dat[22] top.tb_veresk.data_out.dat[21] top.tb_veresk.data_out.dat[20] top.tb_veresk.data_out.dat[19] top.tb_veresk.data_out.dat[18] top.tb_veresk.data_out.dat[17] top.tb_veresk.data_out.dat[16] top.tb_veresk.data_out.dat[15] top.tb_veresk.data_out.dat[14] top.tb_veresk.data_out.dat[13] top.tb_veresk.data_out.dat[12] top.tb_veresk.data_out.dat[11] top.tb_veresk.data_out.dat[10] top.tb_veresk.data_out.dat[9] top.tb_veresk.data_out.dat[8] top.tb_veresk.data_out.dat[7] top.tb_veresk.data_out.dat[6] top.tb_veresk.data_out.dat[5] top.tb_veresk.data_out.dat[4] top.tb_veresk.data_out.dat[3] top.tb_veresk.data_out.dat[2] top.tb_veresk.data_out.dat[1] top.tb_veresk.data_out.dat[0]
 #{top.tb_veresk.data_out.we[3:0]} top.tb_veresk.data_out.we[3] top.tb_veresk.data_out.we[2] top.tb_veresk.data_out.we[1] top.tb_veresk.data_out.we[0]
-@1401200
+#{top.tb_veresk.data_out.dat[31:0]} top.tb_veresk.data_out.dat[31] top.tb_veresk.data_out.dat[30] top.tb_veresk.data_out.dat[29] top.tb_veresk.data_out.dat[28] top.tb_veresk.data_out.dat[27] top.tb_veresk.data_out.dat[26] top.tb_veresk.data_out.dat[25] top.tb_veresk.data_out.dat[24] top.tb_veresk.data_out.dat[23] top.tb_veresk.data_out.dat[22] top.tb_veresk.data_out.dat[21] top.tb_veresk.data_out.dat[20] top.tb_veresk.data_out.dat[19] top.tb_veresk.data_out.dat[18] top.tb_veresk.data_out.dat[17] top.tb_veresk.data_out.dat[16] top.tb_veresk.data_out.dat[15] top.tb_veresk.data_out.dat[14] top.tb_veresk.data_out.dat[13] top.tb_veresk.data_out.dat[12] top.tb_veresk.data_out.dat[11] top.tb_veresk.data_out.dat[10] top.tb_veresk.data_out.dat[9] top.tb_veresk.data_out.dat[8] top.tb_veresk.data_out.dat[7] top.tb_veresk.data_out.dat[6] top.tb_veresk.data_out.dat[5] top.tb_veresk.data_out.dat[4] top.tb_veresk.data_out.dat[3] top.tb_veresk.data_out.dat[2] top.tb_veresk.data_out.dat[1] top.tb_veresk.data_out.dat[0]
+#{top.tb_veresk.data_in.dat[31:0]} top.tb_veresk.data_in.dat[31] top.tb_veresk.data_in.dat[30] top.tb_veresk.data_in.dat[29] top.tb_veresk.data_in.dat[28] top.tb_veresk.data_in.dat[27] top.tb_veresk.data_in.dat[26] top.tb_veresk.data_in.dat[25] top.tb_veresk.data_in.dat[24] top.tb_veresk.data_in.dat[23] top.tb_veresk.data_in.dat[22] top.tb_veresk.data_in.dat[21] top.tb_veresk.data_in.dat[20] top.tb_veresk.data_in.dat[19] top.tb_veresk.data_in.dat[18] top.tb_veresk.data_in.dat[17] top.tb_veresk.data_in.dat[16] top.tb_veresk.data_in.dat[15] top.tb_veresk.data_in.dat[14] top.tb_veresk.data_in.dat[13] top.tb_veresk.data_in.dat[12] top.tb_veresk.data_in.dat[11] top.tb_veresk.data_in.dat[10] top.tb_veresk.data_in.dat[9] top.tb_veresk.data_in.dat[8] top.tb_veresk.data_in.dat[7] top.tb_veresk.data_in.dat[6] top.tb_veresk.data_in.dat[5] top.tb_veresk.data_in.dat[4] top.tb_veresk.data_in.dat[3] top.tb_veresk.data_in.dat[2] top.tb_veresk.data_in.dat[1] top.tb_veresk.data_in.dat[0]
+@1000200
 -DMem
 @800200
 -Control
@@ -57,6 +64,8 @@ top.tb_veresk.cpu.stall
 top.tb_veresk.cpu.decode_stall
 top.tb_veresk.cpu.rs1_bypass
 top.tb_veresk.cpu.rs2_bypass
+top.tb_veresk.cpu.rs1_load
+top.tb_veresk.cpu.rs2_load
 @1000200
 -Control
 @c00200
@@ -70,7 +79,7 @@ top.tb_veresk.cpu.fetch_in.target_en
 -fetch_in
 @800200
 -decode_reg
-@23
+@22
 #{top.tb_veresk.cpu.decode_reg.pc[31:0]} top.tb_veresk.cpu.decode_reg.pc[31] top.tb_veresk.cpu.decode_reg.pc[30] top.tb_veresk.cpu.decode_reg.pc[29] top.tb_veresk.cpu.decode_reg.pc[28] top.tb_veresk.cpu.decode_reg.pc[27] top.tb_veresk.cpu.decode_reg.pc[26] top.tb_veresk.cpu.decode_reg.pc[25] top.tb_veresk.cpu.decode_reg.pc[24] top.tb_veresk.cpu.decode_reg.pc[23] top.tb_veresk.cpu.decode_reg.pc[22] top.tb_veresk.cpu.decode_reg.pc[21] top.tb_veresk.cpu.decode_reg.pc[20] top.tb_veresk.cpu.decode_reg.pc[19] top.tb_veresk.cpu.decode_reg.pc[18] top.tb_veresk.cpu.decode_reg.pc[17] top.tb_veresk.cpu.decode_reg.pc[16] top.tb_veresk.cpu.decode_reg.pc[15] top.tb_veresk.cpu.decode_reg.pc[14] top.tb_veresk.cpu.decode_reg.pc[13] top.tb_veresk.cpu.decode_reg.pc[12] top.tb_veresk.cpu.decode_reg.pc[11] top.tb_veresk.cpu.decode_reg.pc[10] top.tb_veresk.cpu.decode_reg.pc[9] top.tb_veresk.cpu.decode_reg.pc[8] top.tb_veresk.cpu.decode_reg.pc[7] top.tb_veresk.cpu.decode_reg.pc[6] top.tb_veresk.cpu.decode_reg.pc[5] top.tb_veresk.cpu.decode_reg.pc[4] top.tb_veresk.cpu.decode_reg.pc[3] top.tb_veresk.cpu.decode_reg.pc[2] top.tb_veresk.cpu.decode_reg.pc[1] top.tb_veresk.cpu.decode_reg.pc[0]
 @28
 #{top.tb_veresk.cpu.decode_reg.op[6:0]} top.tb_veresk.cpu.decode_reg.op[6] top.tb_veresk.cpu.decode_reg.op[5] top.tb_veresk.cpu.decode_reg.op[4] top.tb_veresk.cpu.decode_reg.op[3] top.tb_veresk.cpu.decode_reg.op[2] top.tb_veresk.cpu.decode_reg.op[1] top.tb_veresk.cpu.decode_reg.op[0]
@@ -88,12 +97,17 @@ top.tb_veresk.cpu.decode_reg.req_rs2
 @800200
 -exec_reg
 @28
+[color] 1
 top.tb_veresk.cpu.exec_reg.target_taken
 @22
+[color] 1
 #{top.tb_veresk.cpu.exec_reg.target[31:0]} top.tb_veresk.cpu.exec_reg.target[31] top.tb_veresk.cpu.exec_reg.target[30] top.tb_veresk.cpu.exec_reg.target[29] top.tb_veresk.cpu.exec_reg.target[28] top.tb_veresk.cpu.exec_reg.target[27] top.tb_veresk.cpu.exec_reg.target[26] top.tb_veresk.cpu.exec_reg.target[25] top.tb_veresk.cpu.exec_reg.target[24] top.tb_veresk.cpu.exec_reg.target[23] top.tb_veresk.cpu.exec_reg.target[22] top.tb_veresk.cpu.exec_reg.target[21] top.tb_veresk.cpu.exec_reg.target[20] top.tb_veresk.cpu.exec_reg.target[19] top.tb_veresk.cpu.exec_reg.target[18] top.tb_veresk.cpu.exec_reg.target[17] top.tb_veresk.cpu.exec_reg.target[16] top.tb_veresk.cpu.exec_reg.target[15] top.tb_veresk.cpu.exec_reg.target[14] top.tb_veresk.cpu.exec_reg.target[13] top.tb_veresk.cpu.exec_reg.target[12] top.tb_veresk.cpu.exec_reg.target[11] top.tb_veresk.cpu.exec_reg.target[10] top.tb_veresk.cpu.exec_reg.target[9] top.tb_veresk.cpu.exec_reg.target[8] top.tb_veresk.cpu.exec_reg.target[7] top.tb_veresk.cpu.exec_reg.target[6] top.tb_veresk.cpu.exec_reg.target[5] top.tb_veresk.cpu.exec_reg.target[4] top.tb_veresk.cpu.exec_reg.target[3] top.tb_veresk.cpu.exec_reg.target[2] top.tb_veresk.cpu.exec_reg.target[1] top.tb_veresk.cpu.exec_reg.target[0]
 #{top.tb_veresk.cpu.exec_reg.mem_out.addr[31:0]} top.tb_veresk.cpu.exec_reg.mem_out.addr[31] top.tb_veresk.cpu.exec_reg.mem_out.addr[30] top.tb_veresk.cpu.exec_reg.mem_out.addr[29] top.tb_veresk.cpu.exec_reg.mem_out.addr[28] top.tb_veresk.cpu.exec_reg.mem_out.addr[27] top.tb_veresk.cpu.exec_reg.mem_out.addr[26] top.tb_veresk.cpu.exec_reg.mem_out.addr[25] top.tb_veresk.cpu.exec_reg.mem_out.addr[24] top.tb_veresk.cpu.exec_reg.mem_out.addr[23] top.tb_veresk.cpu.exec_reg.mem_out.addr[22] top.tb_veresk.cpu.exec_reg.mem_out.addr[21] top.tb_veresk.cpu.exec_reg.mem_out.addr[20] top.tb_veresk.cpu.exec_reg.mem_out.addr[19] top.tb_veresk.cpu.exec_reg.mem_out.addr[18] top.tb_veresk.cpu.exec_reg.mem_out.addr[17] top.tb_veresk.cpu.exec_reg.mem_out.addr[16] top.tb_veresk.cpu.exec_reg.mem_out.addr[15] top.tb_veresk.cpu.exec_reg.mem_out.addr[14] top.tb_veresk.cpu.exec_reg.mem_out.addr[13] top.tb_veresk.cpu.exec_reg.mem_out.addr[12] top.tb_veresk.cpu.exec_reg.mem_out.addr[11] top.tb_veresk.cpu.exec_reg.mem_out.addr[10] top.tb_veresk.cpu.exec_reg.mem_out.addr[9] top.tb_veresk.cpu.exec_reg.mem_out.addr[8] top.tb_veresk.cpu.exec_reg.mem_out.addr[7] top.tb_veresk.cpu.exec_reg.mem_out.addr[6] top.tb_veresk.cpu.exec_reg.mem_out.addr[5] top.tb_veresk.cpu.exec_reg.mem_out.addr[4] top.tb_veresk.cpu.exec_reg.mem_out.addr[3] top.tb_veresk.cpu.exec_reg.mem_out.addr[2] top.tb_veresk.cpu.exec_reg.mem_out.addr[1] top.tb_veresk.cpu.exec_reg.mem_out.addr[0]
 @28
 top.tb_veresk.cpu.exec_reg.mem_out.we
+top.tb_veresk.cpu.exec_reg.mem_out.re
+@22
+#{top.tb_veresk.cpu.exec_reg.mem_out.rd[4:0]} top.tb_veresk.cpu.exec_reg.mem_out.rd[4] top.tb_veresk.cpu.exec_reg.mem_out.rd[3] top.tb_veresk.cpu.exec_reg.mem_out.rd[2] top.tb_veresk.cpu.exec_reg.mem_out.rd[1] top.tb_veresk.cpu.exec_reg.mem_out.rd[0]
 @c00200
 -wreg
 @28
@@ -105,6 +119,10 @@ top.tb_veresk.cpu.exec_reg.wreg.en
 -wreg
 @1000200
 -exec_reg
+@800200
+-wb_reg
+@1000200
+-wb_reg
 @c00200
 -regs
 @22

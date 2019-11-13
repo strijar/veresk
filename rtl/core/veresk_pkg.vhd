@@ -150,6 +150,7 @@ package veresk_pkg is
 	we	: std_logic;
 	size	: op_mem_type;
 	re	: std_logic;
+	rd	: reg_type;
     end record;
 
     type exec_type is record

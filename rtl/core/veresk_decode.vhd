@@ -149,7 +149,7 @@ begin
 		    decode.req_rs2 <= '0';
 		end if;
 
-		decode.imm(12) <= inst(31);
+		decode.imm(31 downto 12) <= (others => inst(31));
 		decode.imm(10 downto 5) <= inst(30 downto 25);
 		decode.imm(4 downto 1) <= inst(11 downto 8);
 		decode.imm(11) <= inst(7);
