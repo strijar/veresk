@@ -38,7 +38,7 @@ use work.veresk_pkg.all;
 
 entity veresk_mem is
     port (
-	exec		: in exec_type;
+	mem_in		: in mem_out_type;
 	data_out	: out dbus_out_type
     );
 end veresk_mem;
@@ -46,5 +46,27 @@ end veresk_mem;
 architecture rtl of veresk_mem is
 
 begin
+
+    data_out.addr <= mem_in.addr;
+    data_out.dat <= mem_in.dat;
+
+    process (mem_in) begin
+	data_out.we <= (others => '0');
+
+	if mem_in.we = '1' then
+	    case mem_in.size is
+		when RV32_MEM_SIZE_B =>
+		    data_out.we <= b"0001";
+
+		when RV32_MEM_SIZE_H =>
+		    data_out.we <= b"0011";
+
+		when RV32_MEM_SIZE_W =>
+		    data_out.we <= b"1111";
+
+		when others =>
+	    end case;
+	end if;
+    end process;
 
 end;

@@ -83,12 +83,12 @@ begin
 	exec.wreg.dat <= (others => '0');
 
 	exec.target_taken <= '0';
-	exec.target_ignore <= '0';
 	exec.target <= (others => '0');
 
-	exec.dbus_out.addr <= (others => '0');
-	exec.dbus_out.dat <= (others => '0');
-	exec.dbus_out.we <= b"0000";
+	exec.mem_out.addr <= (others => '0');
+	exec.mem_out.dat <= (others => '0');
+	exec.mem_out.size <= (others => '0');
+	exec.mem_out.we <= '0';
 
 	case decode.op is
 	    when RV32I_OP_LUI =>
@@ -121,21 +121,14 @@ begin
 		exec.target <= unsigned(signed(r1) + signed(decode.imm));
 
 	    when RV32I_OP_STORE =>
-		exec.dbus_out.addr <= std_logic_vector(unsigned(signed(r1) + signed(decode.imm)));
-		exec.dbus_out.dat <= r2;
-
-		case decode.fn3 is
-		    when RV32_MEM_SIZE_B => exec.dbus_out.we <= b"0001";
-		    when RV32_MEM_SIZE_H => exec.dbus_out.we <= b"0011";
-		    when RV32_MEM_SIZE_W => exec.dbus_out.we <= b"1111";
-
-		    when others =>
-		end case;
+		exec.mem_out.addr <= std_logic_vector(unsigned(signed(r1) + signed(decode.imm)));
+		exec.mem_out.dat <= r2;
+		exec.mem_out.size <= decode.fn3;
+		exec.mem_out.we <= '1';
 
 	    when RV32I_OP_BRANCH =>
 		exec.target <= branch.addr;
 		exec.target_taken <= branch.taken;
-		exec.target_ignore <= branch.ignore;
 
 	    when others =>
 	end case;

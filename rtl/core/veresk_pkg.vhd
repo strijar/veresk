@@ -139,7 +139,9 @@ package veresk_pkg is
 	fn7		: op_fn7_type;
 	req_rs1		: std_logic;
 	req_rs2		: std_logic;
+
 	jump		: std_logic;
+	branch		: std_logic;
     end record;
 
     type wreg_type is record
@@ -148,17 +150,23 @@ package veresk_pkg is
 	dat		: cell_type;
     end record;
 
+    type mem_out_type is record
+	addr	: cell_type;
+	dat	: cell_type;
+	we	: std_logic;
+	size	: op_mem_type;
+	re	: std_logic;
+    end record;
+
     type exec_type is record
 	wreg		: wreg_type;
 	target_taken	: std_logic;
-	target_ignore	: std_logic;
 	target		: pc_type;
-	dbus_out	: dbus_out_type;
+	mem_out		: mem_out_type;
     end record;
 
     type branch_type is record
 	taken		: std_logic;
-	ignore		: std_logic;
 	addr		: pc_type;
     end record;
 

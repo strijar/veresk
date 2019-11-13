@@ -24,9 +24,12 @@ end veresk;
 architecture rtl of veresk is
     signal pc			: pc_type;
 
+    type stall_type is (none, jump1, jump2, jump3, delay);
+
+    signal stall, stall_reg	: stall_type;
+
     signal fetch_in		: fetch_in_type;
     signal fetch, fetch_reg	: fetch_out_type;
-    signal fetch_stall		: std_logic := '0';
 
     signal decode_stall		: std_logic := '0';
     signal decode, decode_reg	: decode_type;
@@ -45,7 +48,7 @@ architecture rtl of veresk is
 
 begin
 
-    fetch_in.step <= '1' when fetch_stall = '0' else '0';
+    fetch_in.step <= '1' when stall = none or stall = jump1 else '0';
     fetch_in.target_en <= exec_reg.target_taken;
     fetch_in.target <= exec_reg.target;
 
@@ -53,21 +56,46 @@ begin
 
     -- Control --
 
-    process (decode_reg, exec_reg) begin
-	fetch_stall <= '0';
-
-	if decode_reg.jump = '1' then
-	    if exec_reg.target_taken = '0' and exec_reg.target_ignore = '0' then
-		fetch_stall <= '1';
-	    end if;
-	else
-	    if exec_reg.target_taken = '1' then
-		fetch_stall <= '1';
+    process (clk, rst) begin
+	if rising_edge(clk) then
+	    if rst = '1' then
+		stall_reg <= none;
+	    else
+		stall_reg <= stall;
 	    end if;
 	end if;
     end process;
 
-    decode_stall <= '1' when fetch_stall = '1' and exec.target_ignore = '0' else '0';
+    process (decode_reg, exec, stall_reg) begin
+	case stall_reg is
+	    when none | delay =>
+		if decode_reg.jump = '1' then
+		    stall <= jump3;
+		elsif decode_reg.branch = '1' then
+		    if exec.target_taken = '1' then
+			stall <= jump3;
+		    else
+			stall <= delay;
+		    end if;
+		else
+		    stall <= none;
+		end if;
+
+	    when jump1 =>
+		stall <= none;
+
+	    when jump2 =>
+		stall <= jump1;
+
+	    when jump3 =>
+		stall <= jump2;
+	end case;
+    end process;
+
+    with stall select decode_stall <=
+	'0'	when none,
+	'0'	when delay,
+	'1'	when others;
 
     -- Bypass --
 
@@ -133,6 +161,7 @@ begin
 		decode_reg.req_rs1 <= '0';
 		decode_reg.req_rs2 <= '0';
 		decode_reg.jump <= '0';
+		decode_reg.branch <= '0';
 	    else
 		decode_reg <= decode;
 	    end if;
@@ -148,11 +177,11 @@ begin
 		exec_reg.wreg.rd <= (others => '0');
 		exec_reg.wreg.dat <= (others => '0');
 		exec_reg.target_taken <= '0';
-		exec_reg.target_ignore <= '0';
 		exec_reg.target <= (others => '0');
-		exec_reg.dbus_out.we <= (others => '0');
-		exec_reg.dbus_out.dat <= (others => '0');
-		exec_reg.dbus_out.addr <= (others => '0');
+		exec_reg.mem_out.we <= '0';
+		exec_reg.mem_out.size <= (others => '0');
+		exec_reg.mem_out.dat <= (others => '0');
+		exec_reg.mem_out.addr <= (others => '0');
 	    else
 		exec_reg <= exec;
 	    end if;
@@ -204,7 +233,7 @@ begin
 
     mem_i: entity work.veresk_mem
 	port map(
-	    exec	=> exec_reg,
+	    mem_in	=> exec_reg.mem_out,
 	    data_out	=> data_out
 	);
 

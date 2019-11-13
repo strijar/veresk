@@ -57,49 +57,36 @@ begin
 
     process (decode.fn3, r1, r2) begin
 	branch.taken <= '0';
-	branch.ignore <= '0';
 
 	case decode.fn3 is
 	    when RV32_TEST_EQ =>
 		if r1 = r2 then
 		    branch.taken <= '1';
-		else
-		    branch.ignore <= '1';
 		end if;
 
 	    when RV32_TEST_NE =>
 		if r1 /= r2 then
 		    branch.taken <= '1';
-		else
-		    branch.ignore <= '1';
 		end if;
 
 	    when RV32_TEST_LT =>
 		if signed(r1) < signed(r2) then
 		    branch.taken <= '1';
-		else
-		    branch.ignore <= '1';
 		end if;
 
 	    when RV32_TEST_GE =>
 		if signed(r1) > signed(r2) then
 		    branch.taken <= '1';
-		else
-		    branch.ignore <= '1';
 		end if;
 
 	    when RV32_TEST_LTU =>
 		if unsigned(r1) < unsigned(r2) then
 		    branch.taken <= '1';
-		else
-		    branch.ignore <= '1';
 		end if;
 
 	    when RV32_TEST_GEU =>
 		if unsigned(r1) > unsigned(r2) then
 		    branch.taken <= '1';
-		else
-		    branch.ignore <= '1';
 		end if;
 
 	    when others =>

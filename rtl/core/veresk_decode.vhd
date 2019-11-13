@@ -73,8 +73,11 @@ begin
 
     with decode.op select decode.jump <=
 	'1'	when RV32I_OP_JALR,
-	'1'	when RV32I_OP_BRANCH,
 	'1'	when RV32I_OP_JAL,
+	'0'	when others;
+
+    with decode.op select decode.branch <=
+	'1'	when RV32I_OP_BRANCH,
 	'0'	when others;
 
     process (inst, decode.subset, decode.rs1, decode.rs2) begin
