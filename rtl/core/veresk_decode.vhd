@@ -38,7 +38,8 @@ use work.veresk_pkg.all;
 
 entity veresk_decode is
     port (
-	fetch		: in fetch_out_type;
+	inst		: in cell_type;
+	pc		: in pc_type;
 	decode_out	: out decode_type
     );
 end veresk_decode;
@@ -46,15 +47,13 @@ end veresk_decode;
 architecture rtl of veresk_decode is
 
     signal decode	: decode_type;
-    signal inst		: cell_type;
     signal op		: op_type;
 
 begin
     decode_out <= decode;
 
-    inst <= fetch.inst;
     decode.op <= inst(6 downto 0);
-    decode.pc <= fetch.pc;
+    decode.pc <= pc;
 
     with decode.op select decode.subset <=
 	utype	when RV32I_OP_LUI,

@@ -24,12 +24,12 @@ end veresk;
 architecture rtl of veresk is
     signal pc			: pc_type;
 
-    type stall_type is (none, jump1, jump2, jump3, delay);
+    type stall_type is (none, jump1, jump2, delay);
 
     signal stall, stall_reg	: stall_type;
 
     signal fetch_in		: fetch_in_type;
-    signal fetch, fetch_reg	: fetch_out_type;
+    signal fetch		: fetch_out_type;
 
     signal decode_stall		: std_logic := '0';
     signal decode, decode_reg	: decode_type;
@@ -48,7 +48,6 @@ architecture rtl of veresk is
 
 begin
 
-    fetch_in.step <= '1' when stall = none or stall = jump1 else '0';
     fetch_in.target_en <= exec_reg.target_taken;
     fetch_in.target <= exec_reg.target;
 
@@ -70,10 +69,10 @@ begin
 	case stall_reg is
 	    when none | delay =>
 		if decode_reg.jump = '1' then
-		    stall <= jump3;
+		    stall <= jump2;
 		elsif decode_reg.branch = '1' then
 		    if exec.target_taken = '1' then
-			stall <= jump3;
+			stall <= jump2;
 		    else
 			stall <= delay;
 		    end if;
@@ -86,16 +85,18 @@ begin
 
 	    when jump2 =>
 		stall <= jump1;
-
-	    when jump3 =>
-		stall <= jump2;
 	end case;
     end process;
 
+    with stall select fetch_in.step <=
+	'1' when none,
+	'1' when jump1,
+	'0' when others;
+
     with stall select decode_stall <=
-	'0'	when none,
-	'0'	when delay,
-	'1'	when others;
+	'0' when none,
+	'0' when delay,
+	'1' when others;
 
     -- Bypass --
 
@@ -124,18 +125,13 @@ begin
 	end if;
     end process;
 
-    -- Fetch pipeline --
+    -- PC --
 
     process (clk, rst) begin
 	if rising_edge(clk) then
 	    if rst = '1' then
 	        pc <= (others => '0');
-
-	        fetch_reg.inst <= (others => '0');
-	        fetch_reg.pc <= (others => '0');
-	        fetch_reg.pc_next <= (others => '0');
 	    else
-		fetch_reg <= fetch;
 		pc <= fetch.pc_next;
 	    end if;
 	end if;
@@ -218,7 +214,8 @@ begin
 
     decode_i: entity work.veresk_decode
 	port map(
-	    fetch	=> fetch_reg,
+	    pc		=> fetch.pc,
+	    inst	=> fetch.inst,
 	    decode_out	=> decode
 	);
 
