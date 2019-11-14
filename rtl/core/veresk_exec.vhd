@@ -90,7 +90,6 @@ begin
 	exec.mem_out.size <= (others => '0');
 	exec.mem_out.we <= '0';
 	exec.mem_out.re <= '0';
-	exec.mem_out.rd <= (others => '0');
 
 	case decode.op is
 	    when RV32I_OP_LUI =>
@@ -129,7 +128,7 @@ begin
 		exec.mem_out.we <= '1';
 
 	    when RV32I_OP_LOAD =>
-		exec.mem_out.rd <= decode.rd;
+		exec.wreg.rd <= decode.rd;
 		exec.mem_out.addr <= std_logic_vector(unsigned(signed(r1) + signed(decode.imm)));
 		exec.mem_out.size <= decode.fn3;
 		exec.mem_out.re <= '1';

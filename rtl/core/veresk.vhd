@@ -36,22 +36,25 @@ architecture rtl of veresk is
 
     signal exec, exec_reg	: exec_type;
 
-    signal wreg			: wreg_type;
+    signal wb			: wreg_type;
+
+    signal wreg, wreg_reg	: wreg_type;
 
     signal rs1			: reg_type;
-    signal rs1_bypass, rs1_load	: std_logic;
     signal rs1_dat, rs1_out	: cell_type;
 
     signal rs2			: reg_type;
-    signal rs2_bypass, rs2_load	: std_logic;
     signal rs2_dat, rs2_out	: cell_type;
+
+    signal rs1_wreg, rs1_load, rs1_alu	: std_logic;
+    signal rs2_wreg, rs2_load, rs2_alu	: std_logic;
 
 begin
 
     fetch_in.target_en <= exec_reg.target_taken;
     fetch_in.target <= exec_reg.target;
 
-    wreg <= exec.wreg;
+    wreg <= wb when wb.en = '1' else exec.wreg;
 
     -- Control --
 
@@ -91,35 +94,69 @@ begin
 	'0' when none,
 	'1' when others;
 
-    -- Bypass --
+    -- Forwarding --
 
     rs1_dat <=
-	exec_reg.wreg.dat when rs1_bypass = '1' else
+	exec_reg.wreg.dat when rs1_alu = '1' else
+	wreg_reg.dat when rs1_wreg = '1' else
 	data_in.dat when rs1_load = '1'
 	else rs1_out;
 
     rs2_dat <=
-	exec_reg.wreg.dat when rs2_bypass = '1' else
+	exec_reg.wreg.dat when rs2_alu = '1' else
+	wreg_reg.dat when rs2_wreg = '1' else
 	data_in.dat when rs2_load = '1'
 	else rs2_out;
 
     process (clk, rst) begin
 	if rising_edge(clk) then
 	    if rst = '1' then
-		rs1_bypass <= '0';
-		rs2_bypass <= '0';
+		rs1_wreg <= '0';
+		rs2_wreg <= '0';
 	    else
-		rs1_bypass <= '0';
-		rs2_bypass <= '0';
+		rs1_wreg <= '0';
+		rs2_wreg <= '0';
 
 		if wreg.en = '1' then
-		    if wreg.rd = decode.rs1 and decode.req_rs1 = '1' then
-			rs1_bypass <= '1';
+		    if decode.req_rs1 = '1' then
+			if wreg.rd = decode.rs1 then
+			    rs1_wreg <= '1';
+			end if;
 		    end if;
 
-		    if wreg.rd = decode.rs2 and decode.req_rs2 = '1' then
-			rs2_bypass <= '1';
+		    if decode.req_rs2 = '1' then
+			if wreg.rd = decode.rs2 then
+			    rs2_wreg <= '1';
+			end if;
 		    end if;
+
+		end if;
+	    end if;
+	end if;
+    end process;
+
+    process (clk, rst) begin
+	if rising_edge(clk) then
+	    if rst = '1' then
+		rs1_alu <= '0';
+		rs2_alu <= '0';
+	    else
+		rs1_alu <= '0';
+		rs2_alu <= '0';
+
+		if wreg.en = '1' then
+		    if decode.req_rs1 = '1' then
+			if exec.wreg.rd = decode.rs1 then
+			    rs1_alu <= '1';
+			end if;
+		    end if;
+
+		    if decode.req_rs2 = '1' then
+			if exec.wreg.rd = decode.rs2 then
+			    rs2_alu <= '1';
+			end if;
+		    end if;
+
 		end if;
 	    end if;
 	end if;
@@ -135,11 +172,11 @@ begin
 		rs2_load <= '0';
 
 		if exec_reg.mem_out.re = '1' then
-		    if exec_reg.mem_out.rd = decode.rs1 and decode.req_rs1 = '1' then
+		    if exec_reg.wreg.rd = decode.rs1 and decode.req_rs1 = '1' then
 			rs1_load <= '1';
 		    end if;
 
-		    if exec_reg.mem_out.rd = decode.rs2 and decode.req_rs2 = '1' then
+		    if exec_reg.wreg.rd = decode.rs2 and decode.req_rs2 = '1' then
 			rs2_load <= '1';
 		    end if;
 		end if;
@@ -155,6 +192,20 @@ begin
 	        pc <= (others => '0');
 	    else
 		pc <= fetch.pc_next;
+	    end if;
+	end if;
+    end process;
+
+    -- Registers --
+
+    process (clk, rst) begin
+	if rising_edge(clk) then
+	    if rst = '1' then
+		wreg_reg.en <= '0';
+		wreg_reg.rd <= (others => '0');
+		wreg_reg.dat <= (others => '0');
+	    else
+		wreg_reg <= wreg;
 	    end if;
 	end if;
     end process;
@@ -198,9 +249,28 @@ begin
 		exec_reg.mem_out.size <= (others => '0');
 		exec_reg.mem_out.dat <= (others => '0');
 		exec_reg.mem_out.addr <= (others => '0');
-		exec_reg.mem_out.rd <= (others => '0');
 	    else
 		exec_reg <= exec;
+	    end if;
+	end if;
+    end process;
+
+
+    -- WB pipeline --
+
+    wb.dat <= data_in.dat;
+
+    process (clk, rst) begin
+	if rising_edge(clk) then
+	    if rst = '1' then
+		wb.en <= '0';
+		wb.rd <= (others => '0');
+	    else
+		wb.en <= exec_reg.mem_out.re;
+
+		if exec_reg.mem_out.re = '1' then
+		    wb.rd <= exec_reg.wreg.rd;
+		end if;
 	    end if;
 	end if;
     end process;
