@@ -2,7 +2,7 @@ GHDL=ghdl
 GHDLFLAGS= --std=93 --ieee=synopsys --workdir=work
 GHDLRUNFLAGS=--wave=tb_veresk.ghw --stop-time=4us
 
-RAM = ram_mem
+RAM = ram_hello
 
 SRC = \
     ../core/veresk_pkg.vhd\

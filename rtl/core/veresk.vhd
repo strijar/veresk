@@ -37,6 +37,7 @@ architecture rtl of veresk is
     signal exec, exec_reg	: exec_type;
 
     signal wb			: wreg_type;
+    signal mem_out		: cell_type;
 
     signal wreg, wreg_reg	: wreg_type;
 
@@ -99,13 +100,13 @@ begin
     rs1_dat <=
 	exec_reg.wreg.dat when rs1_alu = '1' else
 	wreg_reg.dat when rs1_wreg = '1' else
-	data_in.dat when rs1_load = '1'
+	mem_out when rs1_load = '1'
 	else rs1_out;
 
     rs2_dat <=
 	exec_reg.wreg.dat when rs2_alu = '1' else
 	wreg_reg.dat when rs2_wreg = '1' else
-	data_in.dat when rs2_load = '1'
+	mem_out when rs2_load = '1'
 	else rs2_out;
 
     process (clk, rst) begin
@@ -170,6 +171,16 @@ begin
 	    else
 		rs1_load <= '0';
 		rs2_load <= '0';
+
+		if exec.mem_out.re = '1' then
+		    if exec.wreg.rd = decode.rs1 and decode.req_rs1 = '1' then
+			rs1_load <= '1';
+		    end if;
+
+		    if exec.wreg.rd = decode.rs2 and decode.req_rs2 = '1' then
+			rs2_load <= '1';
+		    end if;
+		end if;
 
 		if exec_reg.mem_out.re = '1' then
 		    if exec_reg.wreg.rd = decode.rs1 and decode.req_rs1 = '1' then
@@ -258,7 +269,7 @@ begin
 
     -- WB pipeline --
 
-    wb.dat <= data_in.dat;
+    wb.dat <= mem_out;
 
     process (clk, rst) begin
 	if rising_edge(clk) then
@@ -321,7 +332,12 @@ begin
 
     mem_i: entity work.veresk_mem
 	port map(
+	    clk		=> clk,
+	    rst		=> rst,
+	
 	    mem_in	=> exec_reg.mem_out,
+	    mem_out	=> mem_out,
+	    data_in	=> data_in,
 	    data_out	=> data_out
 	);
 

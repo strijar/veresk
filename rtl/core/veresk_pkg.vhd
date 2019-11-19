@@ -64,6 +64,8 @@ package veresk_pkg is
     constant RV32_MEM_SIZE_H:		op_mem_type := "001";
     constant RV32_MEM_SIZE_W:		op_mem_type := "010";
     constant RV32_MEM_SIZE_D:		op_mem_type := "011";
+    constant RV32_MEM_SIZE_BU:		op_mem_type := "100";
+    constant RV32_MEM_SIZE_HU:		op_mem_type := "101";
 
     subtype op_test_type is std_logic_vector(2 downto 0);
 
