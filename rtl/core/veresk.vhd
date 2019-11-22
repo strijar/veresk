@@ -17,12 +17,17 @@ entity veresk is
 	data_in		: in dbus_in_type;
 	data_out	: out dbus_out_type;
 
-	trace_out	: out trace_type
+	io_en		: out std_logic;
+	io_in		: in dbus_in_type;
+	io_out		: out dbus_out_type
     );
 end veresk;
 
 architecture rtl of veresk is
     signal pc			: pc_type;
+
+    signal dbus_in		: dbus_in_type;
+    signal dbus_out		: dbus_out_type;
 
     type stall_type is (none, jump, delay);
 
@@ -184,11 +189,11 @@ begin
 
 		if exec_reg.mem_out.re = '1' then
 		    if exec_reg.wreg.rd = decode.rs1 and decode.req_rs1 = '1' then
-			rs1_load <= '1';
+--			rs1_load <= '1';
 		    end if;
 
 		    if exec_reg.wreg.rd = decode.rs2 and decode.req_rs2 = '1' then
-			rs2_load <= '1';
+--			rs2_load <= '1';
 		    end if;
 		end if;
 	    end if;
@@ -261,11 +266,25 @@ begin
 		exec_reg.mem_out.dat <= (others => '0');
 		exec_reg.mem_out.addr <= (others => '0');
 	    else
-		exec_reg <= exec;
+		exec_reg.wreg <= exec.wreg;
+
+		exec_reg.target_taken <= exec.target_taken;
+		exec_reg.target <= exec.target;
+
+		exec_reg.mem_out.we <= exec.mem_out.we;
+		exec_reg.mem_out.re <= exec.mem_out.re;
+
+		if exec.mem_out.we = '1' then
+		    exec_reg.mem_out.dat <= exec.mem_out.dat;
+		end if;
+
+		if exec.mem_out.we = '1' or exec.mem_out.re = '1' then
+		    exec_reg.mem_out.addr <= exec.mem_out.addr;
+		    exec_reg.mem_out.size <= exec.mem_out.size;
+		end if;
 	    end if;
 	end if;
     end process;
-
 
     -- WB pipeline --
 
@@ -337,8 +356,38 @@ begin
 	
 	    mem_in	=> exec_reg.mem_out,
 	    mem_out	=> mem_out,
-	    data_in	=> data_in,
-	    data_out	=> data_out
+	    dbus_in	=> dbus_in,
+	    dbus_out	=> dbus_out
 	);
+
+    -- DBus mux --
+
+    data_out.addr <= dbus_out.addr;
+    data_out.dat <= dbus_out.dat;
+
+    io_out.addr <= dbus_out.addr;
+    io_out.dat <= dbus_out.dat;
+
+    io_en <= exec_reg.mem_out.addr(31);
+
+    process (exec_reg.mem_out.addr, data_in, io_in, dbus_out) begin
+	if exec_reg.mem_out.addr(31) = '0' then
+	    dbus_in <= data_in;
+
+	    data_out.re <= dbus_out.re;
+	    data_out.we <= dbus_out.we;
+
+	    io_out.re <= '0';
+	    io_out.we <= (others => '0');
+	else
+	    dbus_in <= io_in;
+
+	    data_out.re <= '0';
+	    data_out.we <= (others => '0');
+
+	    io_out.re <= dbus_out.re;
+	    io_out.we <= dbus_out.we;
+	end if;
+    end process;
 
 end;

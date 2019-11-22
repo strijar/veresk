@@ -105,12 +105,6 @@ package veresk_pkg is
 	ready	: std_logic;
     end record;
 
-    -- Trace
-
-    type trace_type is record
-	ibus_out	: ibus_out_type;
-    end record;
-
     type fetch_in_type is record
 	step		: std_logic;
 	target_en	: std_logic;

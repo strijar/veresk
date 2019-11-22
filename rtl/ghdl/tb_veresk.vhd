@@ -56,6 +56,10 @@ architecture rtl of tb_veresk is
     signal data_out	: dbus_out_type;
     signal data_en	: std_logic;
 
+    signal io_en	: std_logic;
+    signal io_in	: dbus_in_type;
+    signal io_out	: dbus_out_type;
+
 begin
 
     -- 100 MHz clock
@@ -88,7 +92,9 @@ begin
 	    data_in	=> data_in,
 	    data_out	=> data_out,
 
-	    trace_out	=> open
+	    io_en	=> io_en,
+	    io_in	=> io_in,
+	    io_out	=> io_out
 	);
 
     ram_i: entity work.ram

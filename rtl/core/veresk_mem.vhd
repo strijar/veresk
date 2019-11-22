@@ -43,8 +43,8 @@ entity veresk_mem is
 
 	mem_in		: in mem_out_type;
 	mem_out		: out cell_type;
-	data_in		: in dbus_in_type;
-	data_out	: out dbus_out_type
+	dbus_in		: in dbus_in_type;
+	dbus_out	: out dbus_out_type
     );
 end veresk_mem;
 
@@ -55,7 +55,8 @@ architecture rtl of veresk_mem is
 
 begin
 
-    data_out.addr <= mem_in.addr;
+    dbus_out.addr <= mem_in.addr;
+    dbus_out.re <= mem_in.re;
 
     -- Read data mux
 
@@ -71,36 +72,36 @@ begin
 	end if;
     end process;
 
-    process (data_in, read_size, read_addr) begin
+    process (dbus_in, read_size, read_addr) begin
 	mem_out <= (others => '0');
 
 	case read_size is
 	    when RV32_MEM_SIZE_B | RV32_MEM_SIZE_BU =>
 		if read_size = RV32_MEM_SIZE_B then
-		    mem_out(31 downto 8) <= (others => data_in.dat(7));
+		    mem_out(31 downto 8) <= (others => dbus_in.dat(7));
 		end if;
 
 		case read_addr is
-		    when b"00" => mem_out(7 downto 0) <= data_in.dat(7 downto 0);
-		    when b"01" => mem_out(7 downto 0) <= data_in.dat(15 downto 8);
-		    when b"10" => mem_out(7 downto 0) <= data_in.dat(23 downto 16);
-		    when b"11" => mem_out(7 downto 0) <= data_in.dat(31 downto 24);
+		    when b"00" => mem_out(7 downto 0) <= dbus_in.dat(7 downto 0);
+		    when b"01" => mem_out(7 downto 0) <= dbus_in.dat(15 downto 8);
+		    when b"10" => mem_out(7 downto 0) <= dbus_in.dat(23 downto 16);
+		    when b"11" => mem_out(7 downto 0) <= dbus_in.dat(31 downto 24);
 		    when others =>
 		end case;
 
 	    when RV32_MEM_SIZE_H | RV32_MEM_SIZE_HU =>
 		if read_size = RV32_MEM_SIZE_H then
-		    mem_out(31 downto 16) <= (others => data_in.dat(15));
+		    mem_out(31 downto 16) <= (others => dbus_in.dat(15));
 		end if;
 
 		case read_addr is
-		    when b"00" => mem_out(15 downto 0) <= data_in.dat(15 downto 0);
-		    when b"10" => mem_out(15 downto 0) <= data_in.dat(31 downto 16);
+		    when b"00" => mem_out(15 downto 0) <= dbus_in.dat(15 downto 0);
+		    when b"10" => mem_out(15 downto 0) <= dbus_in.dat(31 downto 16);
 		    when others =>
 		end case;
 
 	    when RV32_MEM_SIZE_W =>
-		mem_out <= data_in.dat;
+		mem_out <= dbus_in.dat;
 
 	    when others =>
 	end case;
@@ -109,28 +110,28 @@ begin
     -- Write data mux
 
     process (mem_in) begin
-	data_out.we <= (others => '0');
-	data_out.dat <= (others => '0');
+	dbus_out.we <= (others => '0');
+	dbus_out.dat <= (others => '0');
 
 	if mem_in.we = '1' then
 	    case mem_in.size is
 		when RV32_MEM_SIZE_B =>
 		    case mem_in.addr(1 downto 0) is
 			when b"00" =>
-			    data_out.we <= b"0001";
-			    data_out.dat(7 downto 0) <= mem_in.dat(7 downto 0);
+			    dbus_out.we <= b"0001";
+			    dbus_out.dat(7 downto 0) <= mem_in.dat(7 downto 0);
 
 			when b"01" =>
-			    data_out.we <= b"0010";
-			    data_out.dat(15 downto 8) <= mem_in.dat(7 downto 0);
+			    dbus_out.we <= b"0010";
+			    dbus_out.dat(15 downto 8) <= mem_in.dat(7 downto 0);
 
 			when b"10" =>
-			    data_out.we <= b"0100";
-			    data_out.dat(23 downto 16) <= mem_in.dat(7 downto 0);
+			    dbus_out.we <= b"0100";
+			    dbus_out.dat(23 downto 16) <= mem_in.dat(7 downto 0);
 
 			when b"11" =>
-			    data_out.we <= b"1000";
-			    data_out.dat(31 downto 24) <= mem_in.dat(7 downto 0);
+			    dbus_out.we <= b"1000";
+			    dbus_out.dat(31 downto 24) <= mem_in.dat(7 downto 0);
 
 			when others =>
 		    end case;
@@ -138,19 +139,19 @@ begin
 		when RV32_MEM_SIZE_H =>
 		    case mem_in.addr(1 downto 0) is
 			when b"00" =>
-			    data_out.we <= b"0011";
-			    data_out.dat(15 downto 0) <= mem_in.dat(15 downto 0);
+			    dbus_out.we <= b"0011";
+			    dbus_out.dat(15 downto 0) <= mem_in.dat(15 downto 0);
 
 			when b"10" =>
-			    data_out.we <= b"1100";
-			    data_out.dat(31 downto 16) <= mem_in.dat(15 downto 0);
+			    dbus_out.we <= b"1100";
+			    dbus_out.dat(31 downto 16) <= mem_in.dat(15 downto 0);
 
 			when others =>
 		    end case;
 
 		when RV32_MEM_SIZE_W =>
-		    data_out.we <= b"1111";
-		    data_out.dat <= mem_in.dat;
+		    dbus_out.we <= b"1111";
+		    dbus_out.dat <= mem_in.dat;
 
 		when others =>
 	    end case;
