@@ -44,8 +44,8 @@ entity veresk_regs is
 	r1_in		: in reg_type;
 	r2_in		: in reg_type;
 
-	dat1_out	: out cell_type;
-	dat2_out	: out cell_type;
+	r1_out		: out cell_type;
+	r2_out		: out cell_type;
 
 	wreg_en		: in std_logic;
 	wreg_in		: in reg_type;
@@ -66,15 +66,15 @@ begin
     process (clk, rst) begin
 	if rising_edge(clk) then
 	    if rst = '1' then
-		dat1_out <= (others => '0');
-		dat2_out <= (others => '0');
+		r1_out <= (others => '0');
+		r2_out <= (others => '0');
 	    else
 		if (wreg_en = '1' and wreg_in /= x"0") then
 		    regs(to_integer(unsigned(wreg_in))) <= wdat_in;
 		end if;
 
-		dat1_out <= regs(to_integer(unsigned(r1_in)));
-		dat2_out <= regs(to_integer(unsigned(r2_in)));
+		r1_out <= regs(to_integer(unsigned(r1_in)));
+		r2_out <= regs(to_integer(unsigned(r2_in)));
 
 	    end if;
 	end if;

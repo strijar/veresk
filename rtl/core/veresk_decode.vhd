@@ -48,107 +48,74 @@ architecture rtl of veresk_decode is
 
     type subset_type is (none, rtype, itype, stype, btype, utype, jtype);
 
-    signal decode	: decode_type;
     signal op		: op_type;
+    signal decode	: decode_type;
     signal subset	: subset_type;
 
 begin
     decode_out <= decode;
 
-    decode.op <= inst(6 downto 0);
     decode.pc <= pc;
+    decode.fn3 <= inst(14 downto 12);
+    decode.rs1_sel <= inst(19 downto 15);
+    decode.rs2_sel <= inst(24 downto 20);
+    decode.fn7 <= inst(31 downto 25);
 
-    with decode.op select subset <=
-	utype	when RV32I_OP_LUI,
+    op <= inst(6 downto 0);
+
+    decode.jal <= '1' when op = RV32I_OP_JAL else '0';
+    decode.jalr <= '1' when op = RV32I_OP_JALR else '0';
+    decode.branch <= '1' when op = RV32I_OP_BRANCH else '0';
+    decode.load <= '1' when op = RV32I_OP_LOAD else '0';
+    decode.store <= '1' when op = RV32I_OP_STORE else '0';
+    decode.lui <= '1' when op = RV32I_OP_LUI else '0';
+    decode.auipc <= '1' when op = RV32I_OP_AUIPC else '0';
+
+    decode.alu_imm <= '1' when op = RV32I_OP_IMM else '0';
+    decode.alu_reg <= '1' when op = RV32I_OP_REG else '0';
+    decode.alu <= decode.alu_imm or decode.alu_reg;
+
+    with op select subset <=
 	itype	when RV32I_OP_IMM,
-
-	rtype	when RV32I_OP_REG,
 	itype	when RV32I_OP_JALR,
 	itype	when RV32I_OP_LOAD,
-	itype	when RV32I_OP_SYS,
-	itype	when RV32I_OP_FENCE,
+	rtype	when RV32I_OP_REG,
 	stype	when RV32I_OP_STORE,
 	btype	when RV32I_OP_BRANCH,
+	utype	when RV32I_OP_LUI,
 	utype	when RV32I_OP_AUIPC,
 	jtype	when RV32I_OP_JAL,
 	none	when others;
 
-    process (inst, subset, decode.rs1, decode.rs2) begin
-	decode.rd <= (others => '0');
-	decode.fn3 <= (others => '0');
-	decode.rs1 <= (others => '0');
-	decode.rs2 <= (others => '0');
-	decode.fn7 <= (others => '0');
+    decode.rs1_req <= '1' when
+	(subset = rtype or subset = itype or subset = stype or subset = btype)
+	and decode.rs1_sel /= REG0 else '0';
+
+    decode.rs2_req <= '1' when
+	(subset = rtype or subset = stype or subset = btype)
+	and decode.rs2_sel /= REG0 else '0';
+
+    decode.target.en <= decode.jal or decode.jalr;
+    decode.target.addr <= unsigned(decode.pc) + unsigned(decode.imm);
+
+    decode.rd.sel <= inst(11 downto 7);
+    decode.rd.en <= decode.jalr;
+    decode.rd.dat <= std_logic_vector(unsigned(pc) + 4);
+
+    process (inst, subset) begin
 	decode.imm <= (others => '0');
-	decode.req_rs1 <= '0';
-	decode.req_rs2 <= '0';
 
 	case subset is
-	    when rtype =>
-		decode.rd <= inst(11 downto 7);
-		decode.fn3 <= inst(14 downto 12);
-		decode.rs1 <= inst(19 downto 15);
-		decode.rs2 <= inst(24 downto 20);
-		decode.fn7 <= inst(31 downto 25);
-
-		decode.req_rs1 <= '1';
-		decode.req_rs2 <= '1';
-
-		if decode.rs1 = REG0 then
-		    decode.req_rs1 <= '0';
-		end if;
-
-		if decode.rs2 = REG0 then
-		    decode.req_rs2 <= '0';
-		end if;
-
 	    when itype =>
-		decode.rd <= inst(11 downto 7);
-		decode.fn3 <= inst(14 downto 12);
-		decode.rs1 <= inst(19 downto 15);
-		decode.req_rs1 <= '1';
-
-		if decode.rs1 = REG0 then
-		    decode.req_rs1 <= '0';
-		end if;
-
 		decode.imm(11 downto 0) <= inst(31 downto 20);
 		decode.imm(31 downto 12) <= (others => inst(31));
 
 	    when stype =>
-		decode.fn3 <= inst(14 downto 12);
-		decode.rs1 <= inst(19 downto 15);
-		decode.rs2 <= inst(24 downto 20);
-		decode.req_rs1 <= '1';
-		decode.req_rs2 <= '1';
-
-		if decode.rs1 = REG0 then
-		    decode.req_rs1 <= '0';
-		end if;
-
-		if decode.rs2 = REG0 then
-		    decode.req_rs2 <= '0';
-		end if;
-
 		decode.imm(4 downto 0) <= inst(11 downto 7);
 		decode.imm(11 downto 5) <= inst(31 downto 25);
 		decode.imm(31 downto 12) <= (others => inst(31));
 
 	    when btype =>
-		decode.fn3 <= inst(14 downto 12);
-		decode.rs1 <= inst(19 downto 15);
-		decode.rs2 <= inst(24 downto 20);
-		decode.req_rs1 <= '1';
-		decode.req_rs2 <= '1';
-
-		if decode.rs1 = REG0 then
-		    decode.req_rs1 <= '0';
-		end if;
-
-		if decode.rs2 = REG0 then
-		    decode.req_rs2 <= '0';
-		end if;
-
 		decode.imm(31 downto 12) <= (others => inst(31));
 		decode.imm(10 downto 5) <= inst(30 downto 25);
 		decode.imm(4 downto 1) <= inst(11 downto 8);
@@ -156,20 +123,17 @@ begin
 		decode.imm(0) <= '0';
 
 	    when utype =>
-		decode.rd <= inst(11 downto 7);
 		decode.imm(31 downto 12) <= inst(31 downto 12);
 
 	    when jtype =>
-		decode.rd <= inst(11 downto 7);
-
-		decode.imm(31 downto 20) <= (others =>  inst(31));
+		decode.imm(31 downto 20) <= (others => inst(31));
 		decode.imm(10 downto 1) <= inst(30 downto 21);
 		decode.imm(11 downto 11) <= inst(20 downto 20);
 		decode.imm(19 downto 12) <= inst(19 downto 12);
 		decode.imm(0) <= '0';
 
 	    when others =>
-		end case;
+	end case;
     end process;
 
 end;

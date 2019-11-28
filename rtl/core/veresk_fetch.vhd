@@ -38,34 +38,29 @@ use work.veresk_pkg.all;
 
 entity veresk_fetch is
     port (
+	rst		: in std_logic;
 	pc		: in pc_type;
 	fetch_in	: in fetch_in_type;
 	ibus_in		: in ibus_in_type;
 
-	fetch_out	: out fetch_out_type;
-	ibus_out	: out ibus_out_type
+	pc_next		: out pc_type;
+	inst		: out cell_type
     );
 end veresk_fetch;
 
 architecture rtl of veresk_fetch is
 
-    signal fetch        : fetch_out_type;
-
 begin
 
-    fetch_out <= fetch;
-
-    ibus_out.addr <= std_logic_vector(fetch.pc_next);
-    fetch.inst <= ibus_in.dat;
-    fetch.pc <= pc when fetch_in.target_en = '0' else fetch_in.target;
+    inst <= ibus_in.dat when rst = '0' else (others => '0');
 
     process (fetch_in, pc) begin
-        fetch.pc_next <= pc;
+        pc_next <= pc;
 
-	if fetch_in.target_en = '1' then
-	    fetch.pc_next <= fetch_in.target;
+	if fetch_in.target.en = '1' then
+	    pc_next <= fetch_in.target.addr;
 	elsif fetch_in.step = '1' then
-	    fetch.pc_next <= pc + 4;
+	    pc_next <= pc + 4;
 	end if;
     end process;
 

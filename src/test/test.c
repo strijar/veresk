@@ -7,7 +7,7 @@ void delay(int n) {
 void main(void) {
     volatile int *io;
 
-    io = 0x8000000;
+    io = 0x80000000;
 
     while (1) {
 	*io = 0;

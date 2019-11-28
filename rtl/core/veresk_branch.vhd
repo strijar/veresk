@@ -42,51 +42,46 @@ entity veresk_branch is
 	r1		: in cell_type;
 	r2		: in cell_type;
 
-	branch_out	: out branch_type
+	branch_en	: out std_logic
     );
 end veresk_branch;
 
 architecture rtl of veresk_branch is
 
-    signal taken	: std_logic;
-
 begin
 
-    branch_out.addr <= unsigned(signed(decode.pc) + signed(decode.imm));
-    branch_out.taken <= taken;
-
     process (decode.fn3, r1, r2) begin
-	taken <= '0';
+	branch_en <= '0';
 
 	case decode.fn3 is
 	    when RV32_TEST_EQ =>
 		if r1 = r2 then
-		    taken <= '1';
+		    branch_en <= '1';
 		end if;
 
 	    when RV32_TEST_NE =>
 		if r1 /= r2 then
-		    taken <= '1';
+		    branch_en <= '1';
 		end if;
 
 	    when RV32_TEST_LT =>
 		if signed(r1) < signed(r2) then
-		    taken <= '1';
+		    branch_en <= '1';
 		end if;
 
 	    when RV32_TEST_GE =>
 		if signed(r1) > signed(r2) then
-		    taken <= '1';
+		    branch_en <= '1';
 		end if;
 
 	    when RV32_TEST_LTU =>
 		if unsigned(r1) < unsigned(r2) then
-		    taken <= '1';
+		    branch_en <= '1';
 		end if;
 
 	    when RV32_TEST_GEU =>
 		if unsigned(r1) > unsigned(r2) then
-		    taken <= '1';
+		    branch_en <= '1';
 		end if;
 
 	    when others =>

@@ -78,7 +78,15 @@ begin
 
     -- CPU --
 
-    en <= '1';
+    process (clk, reset) begin
+	if rising_edge(clk) then
+	    if reset = '1' then
+		en <= '0';
+	    else
+		en <= '1';
+	    end if;
+	end if;
+    end process;
 
     cpu: entity work.veresk
 	port map(

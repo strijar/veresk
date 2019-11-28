@@ -49,14 +49,16 @@ end veresk_exec;
 architecture rtl of veresk_exec is
 
     signal exec		: exec_type;
-    signal alu		: alu_type;
-    signal branch	: branch_type;
-    signal wreg_en	: std_logic;
+    signal alu_out	: cell_type;
+    signal branch_en	: std_logic;
+    signal rd_en	: std_logic;
+
+    signal pc_imm	: cell_type;
 
 begin
 
     exec_out <= exec;
-    exec.wreg.en <= wreg_en when decode.rd /= REG0 else '0';
+    exec.pc <= decode.pc;
 
     alu_i: entity work.veresk_alu
 	port map(
@@ -64,7 +66,7 @@ begin
 	    r2		=> r2,
 	    decode	=> decode,
 
-	    alu_out	=> alu
+	    alu_out	=> alu_out
 	);
 
     branch_i: entity work.veresk_branch
@@ -73,72 +75,28 @@ begin
 	    r2		=> r2,
 	    decode	=> decode,
 
-	    branch_out	=> branch
+	    branch_en	=> branch_en
 	);
 
-    process (decode, alu, r1, r2, branch) begin
-	wreg_en <= '0';
+    pc_imm <= std_logic_vector(unsigned(decode.pc) + unsigned(decode.imm));
 
-	exec.wreg.rd <= (others => '0');
-	exec.wreg.dat <= (others => '0');
+    rd_en <= decode.lui or decode.auipc or decode.alu or decode.jal or decode.jalr;
 
-	exec.target_taken <= '0';
-	exec.target <= (others => '0');
+    exec.rd.sel <= decode.rd.sel;
+    exec.rd.en <= rd_en when decode.rd.sel /= REG0 else '0';
 
-	exec.mem_out.addr <= (others => '0');
-	exec.mem_out.dat <= (others => '0');
-	exec.mem_out.size <= (others => '0');
-	exec.mem_out.we <= '0';
-	exec.mem_out.re <= '0';
+    exec.rd.dat <=
+	decode.imm when decode.lui = '1' else
+	alu_out when decode.alu = '1' else
+	pc_imm when decode.auipc = '1' else (others => '0');
 
-	case decode.op is
-	    when RV32I_OP_LUI =>
-		wreg_en <= '1';
-		exec.wreg.rd <= decode.rd;
-		exec.wreg.dat <= decode.imm;
+    exec.mem_out.addr <= std_logic_vector(unsigned(signed(r1) + signed(decode.imm)));
+    exec.mem_out.size <= decode.fn3;
+    exec.mem_out.we <= decode.store;
+    exec.mem_out.re <= decode.load;
+    exec.mem_out.dat <= r2;
 
-	    when RV32I_OP_IMM | RV32I_OP_REG =>
-		wreg_en <= alu.en;
-		exec.wreg.rd <= decode.rd;
-		exec.wreg.dat <= alu.dat;
-
-	    when RV32I_OP_AUIPC =>
-		wreg_en <= '1';
-		exec.wreg.rd <= decode.rd;
-		exec.wreg.dat <= std_logic_vector(unsigned(decode.pc) + unsigned(decode.imm));
-
-	    when RV32I_OP_JAL =>
-		wreg_en <= '1';
-		exec.wreg.rd <= decode.rd;
-		exec.wreg.dat <= std_logic_vector(unsigned(decode.pc) + 4);
-		exec.target_taken <= '1';
-		exec.target <= unsigned(signed(decode.pc) + signed(decode.imm));
-
-	    when RV32I_OP_JALR =>
-		wreg_en <= '1';
-		exec.wreg.rd <= decode.rd;
-		exec.wreg.dat <= std_logic_vector(unsigned(decode.pc) + 4);
-		exec.target_taken <= '1';
-		exec.target <= unsigned(signed(r1) + signed(decode.imm));
-
-	    when RV32I_OP_STORE =>
-		exec.mem_out.addr <= std_logic_vector(unsigned(signed(r1) + signed(decode.imm)));
-		exec.mem_out.dat <= r2;
-		exec.mem_out.size <= decode.fn3;
-		exec.mem_out.we <= '1';
-
-	    when RV32I_OP_LOAD =>
-		exec.wreg.rd <= decode.rd;
-		exec.mem_out.addr <= std_logic_vector(unsigned(signed(r1) + signed(decode.imm)));
-		exec.mem_out.size <= decode.fn3;
-		exec.mem_out.re <= '1';
-
-	    when RV32I_OP_BRANCH =>
-		exec.target <= branch.addr;
-		exec.target_taken <= branch.taken;
-
-	    when others =>
-	end case;
-    end process;
+    exec.target.en <= decode.branch and branch_en;
+    exec.target.addr <= unsigned(pc_imm);
 
 end;

@@ -42,95 +42,82 @@ entity veresk_alu is
 	r1		: in cell_type;
 	r2		: in cell_type;
 
-	alu_out		: out alu_type
+	alu_out		: out cell_type
     );
 end veresk_alu;
 
 architecture rtl of veresk_alu is
 
-    signal alu		: alu_type;
-
 begin
 
-    alu_out <= alu;
-
     process (decode, r1, r2) begin
-	alu.en <= '0';
-	alu.dat <= (others => '0');
+	alu_out <= (others => '0');
 
-	case decode.op is
-	    when RV32I_OP_IMM =>
-		alu.en <= '1';
+	if decode.alu_imm = '1' then
+	    case decode.fn3 is
+		when RV32_FN3_ADDI =>
+		    alu_out <= std_logic_vector(unsigned(r1) + unsigned(decode.imm));
 
-		case decode.fn3 is
-		    when RV32_FN3_ADDI =>
-		        alu.dat <= std_logic_vector(unsigned(r1) + unsigned(decode.imm));
+		when RV32_FN3_SLTI =>
+		    if signed(r1) < signed(decode.imm) then
+			alu_out <= x"00000001";
+		    else
+			alu_out <= x"00000000";
+		    end if;
 
-		    when RV32_FN3_SLTI =>
-			if signed(r1) < signed(decode.imm) then
-			    alu.dat <= x"00000001";
-			else
-			    alu.dat <= x"00000000";
-			end if;
+		when RV32_FN3_SLTIU =>
+		    if unsigned(r1) < unsigned(decode.imm) then
+			alu_out <= x"00000001";
+		    else
+			alu_out <= x"00000000";
+		    end if;
 
-		    when RV32_FN3_SLTIU =>
-			if unsigned(r1) < unsigned(decode.imm) then
-			    alu.dat <= x"00000001";
-			else
-			    alu.dat <= x"00000000";
-			end if;
+		when RV32_FN3_ANDI =>
+		    alu_out <= r1 and decode.imm;
 
-		    when RV32_FN3_ANDI =>
-		        alu.dat <= r1 and decode.imm;
+		when RV32_FN3_ORI =>
+		    alu_out <= r1 or decode.imm;
 
-		    when RV32_FN3_ORI =>
-		        alu.dat <= r1 or decode.imm;
+		when RV32_FN3_XORI =>
+		    alu_out <= r1 xor decode.imm;
 
-		    when RV32_FN3_XORI =>
-		        alu.dat <= r1 xor decode.imm;
+		when others =>
+	    end case;
+	elsif decode.alu_reg = '1' then
+	    case decode.fn3 is
+		when RV32_FN3_ADD =>
+		    if decode.fn7 = RV32_FN7_0 then
+		        alu_out <= std_logic_vector(signed(r1) + signed(r2));
+		    else
+		        alu_out <= std_logic_vector(signed(r1) - signed(r2));
+		    end if;
 
-		    when others =>
-		end case;
+		when RV32_FN3_SLT =>
+		    if signed(r1) < signed(r2) then
+			alu_out <= x"00000001";
+		    else
+			alu_out <= x"00000000";
+		    end if;
 
-	    when RV32I_OP_REG =>
-		alu.en <= '1';
+		when RV32_FN3_SLTU =>
+		    if unsigned(r1) < unsigned(r2) then
+			alu_out <= x"00000001";
+		    else
+			alu_out <= x"00000000";
+		    end if;
 
-		case decode.fn3 is
-		    when RV32_FN3_ADD =>
-			if decode.fn7 = RV32_FN7_0 then
-		    	    alu.dat <= std_logic_vector(signed(r1) + signed(r2));
-		    	else
-		    	    alu.dat <= std_logic_vector(signed(r1) - signed(r2));
-		    	end if;
+		when RV32_FN3_AND =>
+		    alu_out <= r1 and r2;
 
-		    when RV32_FN3_SLT =>
-			if signed(r1) < signed(r2) then
-			    alu.dat <= x"00000001";
-			else
-			    alu.dat <= x"00000000";
-			end if;
+		when RV32_FN3_OR =>
+		    alu_out <= r1 or r2;
 
-		    when RV32_FN3_SLTU =>
-			if unsigned(r1) < unsigned(r2) then
-			    alu.dat <= x"00000001";
-			else
-			    alu.dat <= x"00000000";
-			end if;
+		when RV32_FN3_XOR =>
+		    alu_out <= r1 xor r2;
 
-		    when RV32_FN3_AND =>
-		        alu.dat <= r1 and r2;
-
-		    when RV32_FN3_OR =>
-		        alu.dat <= r1 or r2;
-
-		    when RV32_FN3_XOR =>
-		        alu.dat <= r1 xor r2;
-
-		    when others =>
-		end case;
-
-	    when others =>
-	end case;
+		when others =>
+	    end case;
+	end if;
     end process;
 
 end;

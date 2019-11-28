@@ -89,6 +89,7 @@ package veresk_pkg is
 
     type ibus_in_type is record
 	dat	: cell_type;
+	ready	: std_logic;
     end record;
 
     -- Data/IO bus
@@ -105,39 +106,52 @@ package veresk_pkg is
 	ready	: std_logic;
     end record;
 
-    type fetch_in_type is record
-	step		: std_logic;
-	target_en	: std_logic;
-	target		: pc_type;
-    end record;
-
-    type fetch_out_type is record
-	inst		: cell_type;
-	pc		: pc_type;
-	pc_next		: pc_type;
+    type target_type is record
+	en		: std_logic;
+	addr		: pc_type;
     end record;
 
     subtype reg_type is std_logic_vector(4 downto 0);
 
     constant REG0:		reg_type := b"00000";
 
-    type decode_type is record
-	pc		: pc_type;
-	op		: op_type;
-	rd		: reg_type;
-	fn3		: op_fn3_type;
-	rs1		: reg_type;
-	rs2		: reg_type;
-	imm		: cell_type;
-	fn7		: op_fn7_type;
-	req_rs1		: std_logic;
-	req_rs2		: std_logic;
+    type rd_type is record
+	en		: std_logic;
+	sel		: reg_type;
+	dat		: cell_type;
     end record;
 
-    type wreg_type is record
-	en		: std_logic;
-	rd		: reg_type;
-	dat		: cell_type;
+    type fetch_in_type is record
+	step		: std_logic;
+	target		: target_type;
+    end record;
+
+    type decode_type is record
+	pc		: pc_type;
+
+	fn3		: op_fn3_type;
+	fn7		: op_fn7_type;
+	imm		: cell_type;
+
+	rs1_sel		: reg_type;
+	rs2_sel		: reg_type;
+
+	rs1_req		: std_logic;
+	rs2_req		: std_logic;
+
+	jal		: std_logic;
+	jalr		: std_logic;
+	branch		: std_logic;
+	alu		: std_logic;
+	alu_imm		: std_logic;
+	alu_reg		: std_logic;
+	load		: std_logic;
+	store		: std_logic;
+	lui		: std_logic;
+	auipc		: std_logic;
+
+	rd		: rd_type;
+	target		: target_type;
     end record;
 
     type mem_out_type is record
@@ -149,20 +163,14 @@ package veresk_pkg is
     end record;
 
     type exec_type is record
-	wreg		: wreg_type;
-	target_taken	: std_logic;
-	target		: pc_type;
+	pc		: pc_type;
+	rd		: rd_type;
+	target		: target_type;
 	mem_out		: mem_out_type;
     end record;
 
     type wb_type is record
-	en		: std_logic;
-	wreg		: wreg_type;
-    end record;
-
-    type branch_type is record
-	taken		: std_logic;
-	addr		: pc_type;
+	rd		: rd_type;
     end record;
 
     type alu_type is record
@@ -172,6 +180,6 @@ package veresk_pkg is
 
     -- Vectors
 
-    constant START_ADDR		: cell_type := x"0000_0000";
+    constant START_ADDR		: pc_type := x"0000_0000";
 
 end package;
