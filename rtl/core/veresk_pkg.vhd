@@ -170,6 +170,7 @@ package veresk_pkg is
     end record;
 
     type wb_type is record
+	load		: std_logic;
 	rd		: rd_type;
     end record;
 

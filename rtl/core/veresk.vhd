@@ -30,41 +30,72 @@ architecture rtl of veresk is
     signal dbus_in		: dbus_in_type;
     signal dbus_out		: dbus_out_type;
 
+    signal stall, stall_r	: std_logic;
     signal fetch_rst		: std_logic;
     signal fetch_in		: fetch_in_type;
 
+    signal load_branch		: std_logic;
     signal decode_rst		: std_logic;
     signal decode, decode_r	: decode_type;
 
     signal exec, exec_r		: exec_type;
-    signal wb_r			: wb_type;
+    signal wb, wb_r		: wb_type;
 
     signal rs1_out, rs2_out	: cell_type;
     signal rs1_in, rs2_in	: cell_type;
     signal rd_out		: rd_type;
 
-    signal mem_out		: cell_type;
+    signal mem_out		: rd_type;
 
 begin
 
     ibus_out.addr <= std_logic_vector(pc_next);
 
-    fetch_in.step <= '1';
-    fetch_in.target <= decode_r.target when decode_r.target.en = '1' else exec_r.target;
+    fetch_in.step <= en and not stall;
+    fetch_in.target <= exec_r.target when exec_r.target.en = '1' else decode_r.target;
 
-    fetch_rst <= decode_r.jal or decode_r.jalr;
-    decode_rst <= '0';
+    fetch_rst <= fetch_in.target.en or exec.target.en;
+    decode_rst <= stall;
 
-    -- PC --
+    mem_out.sel <= wb_r.rd.sel;
+    mem_out.en <= wb_r.load;
+
+    rd_out <=
+	decode_r.rd	when decode_r.rd.en = '1' else
+--	wb.rd		when wb.rd.en = '1' else
+	mem_out		when mem_out.en = '1' else
+	exec.rd;
+
+    rs1_in <=
+	exec_r.rd.dat	when exec_r.rd.en = '1' and decode_r.rs1_req = '1' and decode_r.rs1_sel = exec_r.rd.sel else
+	wb_r.rd.dat	when wb_r.rd.en = '1' and decode_r.rs1_req = '1' and decode_r.rs1_sel = wb_r.rd.sel else
+	mem_out.dat	when mem_out.en = '1' and decode_r.rs1_req = '1' and decode_r.rs1_sel = mem_out.sel else
+	rs1_out;
+
+    rs2_in <=
+	exec_r.rd.dat	when exec_r.rd.en = '1' and decode_r.rs2_req = '1' and decode_r.rs2_sel = exec_r.rd.sel else
+	wb_r.rd.dat	when wb_r.rd.en = '1' and decode_r.rs2_req = '1' and decode_r.rs2_sel = wb_r.rd.sel else
+	mem_out.dat	when mem_out.en = '1' and decode_r.rs2_req = '1' and decode_r.rs2_sel = mem_out.sel else
+	rs2_out;
+
+    load_branch <= decode_r.load and decode.branch;
+
+    stall <=
+	'0' when stall_r = '1' else
+	'1' when load_branch = '1' and decode.rs1_req = '1' and decode.rs1_sel = decode_r.rd.sel else
+	'1' when load_branch = '1' and decode.rs2_req = '1' and decode.rs2_sel = decode_r.rd.sel else
+	'0';
+
+    -- PC and stall --
 
     process (clk, rst) begin
 	if rising_edge(clk) then
 	    if rst = '1' then
 	        pc <= START_ADDR;
-		fetch_in.step <= '0';
+	        stall_r <= '0';
 	    else
 		pc <= pc_next;
-		fetch_in.step <= '1';
+		stall_r <= stall;
 	    end if;
 	end if;
     end process;
@@ -144,6 +175,21 @@ begin
 	end if;
     end process;
 
+    -- Exec/WB pipeline --
+
+    process (clk, rst) begin
+	if rising_edge(clk) then
+	    if rst = '1' then
+		wb_r.rd.en <= '0';
+		wb_r.rd.sel <= (others => '0');
+		wb_r.rd.dat <= (others => '0');
+		wb_r.load <= '0';
+	    else
+		wb_r <= wb;
+	    end if;
+	end if;
+    end process;
+
     ---
 
     fetch_i: entity work.veresk_fetch
@@ -180,9 +226,6 @@ begin
 	    decode_out	=> decode
 	);
 
-    rs1_in <= rs1_out;
-    rs2_in <= rs2_out;
-
     exec_i: entity work.veresk_exec
 	port map(
 	    r1		=> rs1_in,
@@ -192,13 +235,20 @@ begin
 	    exec_out	=> exec
 	);
 
+    wb_i: entity work.veresk_wb
+	port map(
+	    exec	=> exec_r,
+	    wb_out	=> wb
+	);
+
+
     mem_i: entity work.veresk_mem
 	port map(
 	    clk		=> clk,
 	    rst		=> rst,
-	
+
 	    mem_in	=> exec_r.mem_out,
-	    mem_out	=> mem_out,
+	    mem_out	=> mem_out.dat,
 	    dbus_in	=> dbus_in,
 	    dbus_out	=> dbus_out
 	);
