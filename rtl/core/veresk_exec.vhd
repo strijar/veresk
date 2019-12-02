@@ -53,7 +53,9 @@ architecture rtl of veresk_exec is
     signal branch_en	: std_logic;
     signal rd_en	: std_logic;
 
+    signal pc_4		: cell_type;
     signal pc_imm	: cell_type;
+    signal r1_imm	: cell_type;
 
 begin
 
@@ -78,9 +80,11 @@ begin
 	    branch_en	=> branch_en
 	);
 
+    pc_4 <= std_logic_vector(unsigned(decode.pc) + 4);
     pc_imm <= std_logic_vector(unsigned(decode.pc) + unsigned(decode.imm));
+    r1_imm <= std_logic_vector(unsigned(r1) + unsigned(decode.imm));
 
-    rd_en <= decode.lui or decode.auipc or decode.alu or decode.jal or decode.jalr;
+    rd_en <= decode.lui or decode.auipc or decode.alu or decode.jalr;
 
     exec.rd.sel <= decode.rd.sel;
     exec.rd.en <= rd_en when decode.rd.sel /= REG0 else '0';
@@ -88,7 +92,8 @@ begin
     exec.rd.dat <=
 	decode.imm when decode.lui = '1' else
 	alu_out when decode.alu = '1' else
-	pc_imm when decode.auipc = '1' else (others => '0');
+	pc_imm when decode.auipc = '1' else
+	pc_4 when decode.jalr = '1' else (others => '0');
 
     exec.mem_out.addr <= std_logic_vector(unsigned(signed(r1) + signed(decode.imm)));
     exec.mem_out.size <= decode.fn3;
@@ -96,7 +101,7 @@ begin
     exec.mem_out.re <= decode.load;
     exec.mem_out.dat <= r2;
 
-    exec.target.en <= decode.branch and branch_en;
-    exec.target.addr <= unsigned(pc_imm);
+    exec.target.en <= decode.jalr or (decode.branch and branch_en);
+    exec.target.addr <= unsigned(r1_imm) when decode.jalr = '1' else unsigned(pc_imm);
 
 end;

@@ -95,11 +95,11 @@ begin
 	(subset = rtype or subset = stype or subset = btype)
 	and decode.rs2_sel /= REG0 else '0';
 
-    decode.target.en <= decode.jal or decode.jalr;
+    decode.target.en <= decode.jal;
     decode.target.addr <= unsigned(decode.pc) + unsigned(decode.imm);
 
     decode.rd.sel <= inst(11 downto 7);
-    decode.rd.en <= decode.jalr;
+    decode.rd.en <= decode.jal;
     decode.rd.dat <= std_logic_vector(unsigned(pc) + 4);
 
     process (inst, subset) begin

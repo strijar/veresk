@@ -52,7 +52,7 @@ begin
     ibus_out.addr <= std_logic_vector(pc_next);
 
     fetch_in.step <= en and not stall;
-    fetch_in.target <= exec_r.target when exec_r.target.en = '1' else decode_r.target;
+    fetch_in.target <= decode_r.target when decode_r.target.en = '1' else exec_r.target;
 
     fetch_rst <= fetch_in.target.en or exec.target.en;
     decode_rst <= stall;
@@ -62,7 +62,6 @@ begin
 
     rd_out <=
 	decode_r.rd	when decode_r.rd.en = '1' else
---	wb.rd		when wb.rd.en = '1' else
 	mem_out		when mem_out.en = '1' else
 	exec.rd;
 

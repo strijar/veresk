@@ -69,7 +69,7 @@ begin
 		r1_out <= (others => '0');
 		r2_out <= (others => '0');
 	    else
-		if (wreg_en = '1' and wreg_in /= x"0") then
+		if wreg_en = '1' and wreg_in /= REG0 then
 		    regs(to_integer(unsigned(wreg_in))) <= wdat_in;
 		end if;
 
