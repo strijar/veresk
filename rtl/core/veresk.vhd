@@ -34,7 +34,6 @@ architecture rtl of veresk is
     signal fetch_rst		: std_logic;
     signal fetch_in		: fetch_in_type;
 
-    signal load_branch		: std_logic;
     signal decode_rst		: std_logic;
     signal decode, decode_r	: decode_type;
 
@@ -77,12 +76,10 @@ begin
 	mem_out.dat	when mem_out.en = '1' and decode_r.rs2_req = '1' and decode_r.rs2_sel = mem_out.sel else
 	rs2_out;
 
-    load_branch <= decode_r.load and decode.branch;
-
     stall <=
 	'0' when stall_r = '1' else
-	'1' when load_branch = '1' and decode.rs1_req = '1' and decode.rs1_sel = decode_r.rd.sel else
-	'1' when load_branch = '1' and decode.rs2_req = '1' and decode.rs2_sel = decode_r.rd.sel else
+	'1' when decode_r.load = '1' and decode.rs1_req = '1' and decode.rs1_sel = decode_r.rd.sel else
+	'1' when decode_r.load = '1' and decode.rs2_req = '1' and decode.rs2_sel = decode_r.rd.sel else
 	'0';
 
     -- PC and stall --
@@ -239,7 +236,6 @@ begin
 	    exec	=> exec_r,
 	    wb_out	=> wb
 	);
-
 
     mem_i: entity work.veresk_mem
 	port map(
