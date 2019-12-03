@@ -2,16 +2,16 @@
 include ../common.mk
 
 LDFLAGS += -Wl,-T../veresk.ld
-CFLAGS += -Os
+CFLAGS += -Os -I..
 
-OBJECTS := start.o test.o
+OBJECTS := start.o main.o
 
-all: test.elf start.o test.bin test.coe
+all: main.elf start.o main.bin main.coe
 
-test.elf: $(OBJECTS)
-	$(LD) -o test.elf $(LDFLAGS) $(OBJECTS)
-	$(SIZE) test.elf
-	$(OBJDUMP) -d test.elf > test.lst
+main.elf: $(OBJECTS)
+	$(LD) -o main.elf $(LDFLAGS) $(OBJECTS)
+	$(SIZE) main.elf
+	$(OBJDUMP) -d main.elf > main.lst
 
 clean:
 	-$(RM) $(OBJECTS)
@@ -19,7 +19,7 @@ clean:
 
 # Object file rules:
 
-test.o: test.c
+main.o: main.c
 	$(CC) -c -o $@ $(CFLAGS) $<
 
 start.o: ../start.S

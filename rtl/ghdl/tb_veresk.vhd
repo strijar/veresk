@@ -60,6 +60,9 @@ architecture rtl of tb_veresk is
     signal io_in	: dbus_in_type;
     signal io_out	: dbus_out_type;
 
+    signal gpio_en	: std_logic;
+    signal gpio		: cell_type;
+
 begin
 
     -- 100 MHz clock
@@ -124,6 +127,29 @@ begin
 	    b_dout	=> data_in.dat,
 	    b_we	=> data_out.we,
 	    b_din	=> data_out.dat
+	);
+
+    -- SOC --
+
+    process (io_out) begin
+	gpio_en <= '0';
+
+	case io_out.addr(9 downto 8) is
+	    when "00" => gpio_en <= '1';
+	    when others =>
+	end case;
+    end process;
+
+    gpio_i: entity work.gpio
+	port map(
+	    clk		=> clk,
+	    rst		=> reset,
+
+	    bus_en	=> gpio_en,
+	    bus_in	=> io_out,
+	    bus_out	=> open,
+
+	    gpio_out	=> gpio
 	);
 
 end rtl;

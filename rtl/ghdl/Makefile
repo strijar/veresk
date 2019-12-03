@@ -2,7 +2,7 @@ GHDL=ghdl
 GHDLFLAGS= --std=93 --ieee=synopsys --workdir=work
 GHDLRUNFLAGS=--wave=tb_veresk.ghw --stop-time=4us
 
-RAM = ram_test
+RAM = ram_blink
 
 SRC = \
     ../core/veresk_pkg.vhd\
@@ -15,6 +15,7 @@ SRC = \
     ../core/veresk_mem.vhd\
     ../core/veresk_wb.vhd\
     ../core/veresk.vhd\
+    ../soc/gpio.vhd\
     $(RAM).vhd\
     tb_veresk.vhd
 
@@ -29,6 +30,7 @@ OBJS = \
     work/veresk_mem.o \
     work/veresk_wb.o \
     work/veresk.o \
+    work/gpio.o \
     work/$(RAM).o \
     work/tb_veresk.o
 
@@ -57,4 +59,7 @@ work/%.o: %.vhd
 	$(GHDL) -a $(GHDLFLAGS) $<
 
 work/%.o: ../core/%.vhd
+	$(GHDL) -a $(GHDLFLAGS) $<
+
+work/%.o: ../soc/%.vhd
 	$(GHDL) -a $(GHDLFLAGS) $<
