@@ -2,7 +2,7 @@
 include ../common.mk
 
 LDFLAGS += -Wl,-T../veresk.ld
-CFLAGS += -Os
+CFLAGS += -Os -I..
 
 OBJECTS := start.o main.o
 

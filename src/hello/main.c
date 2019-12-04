@@ -1,11 +1,20 @@
-static char *mem = "Hello, World!";
+#include <io.h>
+
+int putchar(int c) {
+    volatile *uart_data = ADDR_UART_DATA;
+    volatile *uart_stat = ADDR_UART_STAT;
+
+    while (*uart_stat & UART_TX_BUSY);
+    *uart_data = c;
+}
+
+static char *str = "Hello, World!";
 
 void main(void) {
-    char		*c = mem;
-    volatile char	*io = 0x80000000;
+    char		*c = str;
 
     while (*c) {
-	*io = *c;
+	putchar(*c);
 	c++;
     }
 }

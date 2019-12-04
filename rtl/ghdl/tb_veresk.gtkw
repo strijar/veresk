@@ -1,19 +1,19 @@
 [*]
 [*] GTKWave Analyzer v3.3.79 (w)1999-2017 BSI
-[*] Tue Dec  3 12:45:23 2019
+[*] Wed Dec  4 10:05:10 2019
 [*]
 [dumpfile] "/home/master/fpga/veresk/rtl/ghdl/tb_veresk.ghw"
-[dumpfile_mtime] "Tue Dec  3 12:36:36 2019"
-[dumpfile_size] 1238503
+[dumpfile_mtime] "Wed Dec  4 10:03:15 2019"
+[dumpfile_size] 1361185
 [savefile] "/home/master/fpga/veresk/rtl/ghdl/tb_veresk.gtkw"
-[timestart] 1382000000
+[timestart] 4950400000
 [size] 1920 1007
 [pos] -1 -1
-*-25.123243 1200000000 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+*-25.123243 5085000000 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
 [treeopen] top.
 [treeopen] top.tb_veresk.
 [treeopen] top.tb_veresk.cpu.
-[treeopen] top.tb_veresk.cpu.decode_r.
+[treeopen] top.tb_veresk.cpu.decode_r.rd.
 [treeopen] top.tb_veresk.cpu.decode_r.target.
 [treeopen] top.tb_veresk.cpu.exec.rd.
 [treeopen] top.tb_veresk.cpu.exec_i.branch_i.decode.
@@ -21,7 +21,7 @@
 [treeopen] top.tb_veresk.cpu.exec_r.rd.
 [treeopen] top.tb_veresk.cpu.exec_r.target.
 [treeopen] top.tb_veresk.cpu.fetch_in.target.
-[treeopen] top.tb_veresk.cpu.regs_i.
+[treeopen] top.tb_veresk.cpu.mem_out.
 [treeopen] top.tb_veresk.cpu.regs_i.regs.
 [treeopen] top.tb_veresk.cpu.wb_r.rd.
 [treeopen] top.tb_veresk.ram_i.ram.
@@ -43,6 +43,8 @@ top.tb_veresk.clk
 top.tb_veresk.cpu.stall
 top.tb_veresk.cpu.fetch_rst
 top.tb_veresk.cpu.decode_rst
+@200
+-
 @22
 +{rs1_in} #{top.tb_veresk.cpu.rs1_in[31:0]} top.tb_veresk.cpu.rs1_in[31] top.tb_veresk.cpu.rs1_in[30] top.tb_veresk.cpu.rs1_in[29] top.tb_veresk.cpu.rs1_in[28] top.tb_veresk.cpu.rs1_in[27] top.tb_veresk.cpu.rs1_in[26] top.tb_veresk.cpu.rs1_in[25] top.tb_veresk.cpu.rs1_in[24] top.tb_veresk.cpu.rs1_in[23] top.tb_veresk.cpu.rs1_in[22] top.tb_veresk.cpu.rs1_in[21] top.tb_veresk.cpu.rs1_in[20] top.tb_veresk.cpu.rs1_in[19] top.tb_veresk.cpu.rs1_in[18] top.tb_veresk.cpu.rs1_in[17] top.tb_veresk.cpu.rs1_in[16] top.tb_veresk.cpu.rs1_in[15] top.tb_veresk.cpu.rs1_in[14] top.tb_veresk.cpu.rs1_in[13] top.tb_veresk.cpu.rs1_in[12] top.tb_veresk.cpu.rs1_in[11] top.tb_veresk.cpu.rs1_in[10] top.tb_veresk.cpu.rs1_in[9] top.tb_veresk.cpu.rs1_in[8] top.tb_veresk.cpu.rs1_in[7] top.tb_veresk.cpu.rs1_in[6] top.tb_veresk.cpu.rs1_in[5] top.tb_veresk.cpu.rs1_in[4] top.tb_veresk.cpu.rs1_in[3] top.tb_veresk.cpu.rs1_in[2] top.tb_veresk.cpu.rs1_in[1] top.tb_veresk.cpu.rs1_in[0]
 +{rs2_in} #{top.tb_veresk.cpu.rs2_in[31:0]} top.tb_veresk.cpu.rs2_in[31] top.tb_veresk.cpu.rs2_in[30] top.tb_veresk.cpu.rs2_in[29] top.tb_veresk.cpu.rs2_in[28] top.tb_veresk.cpu.rs2_in[27] top.tb_veresk.cpu.rs2_in[26] top.tb_veresk.cpu.rs2_in[25] top.tb_veresk.cpu.rs2_in[24] top.tb_veresk.cpu.rs2_in[23] top.tb_veresk.cpu.rs2_in[22] top.tb_veresk.cpu.rs2_in[21] top.tb_veresk.cpu.rs2_in[20] top.tb_veresk.cpu.rs2_in[19] top.tb_veresk.cpu.rs2_in[18] top.tb_veresk.cpu.rs2_in[17] top.tb_veresk.cpu.rs2_in[16] top.tb_veresk.cpu.rs2_in[15] top.tb_veresk.cpu.rs2_in[14] top.tb_veresk.cpu.rs2_in[13] top.tb_veresk.cpu.rs2_in[12] top.tb_veresk.cpu.rs2_in[11] top.tb_veresk.cpu.rs2_in[10] top.tb_veresk.cpu.rs2_in[9] top.tb_veresk.cpu.rs2_in[8] top.tb_veresk.cpu.rs2_in[7] top.tb_veresk.cpu.rs2_in[6] top.tb_veresk.cpu.rs2_in[5] top.tb_veresk.cpu.rs2_in[4] top.tb_veresk.cpu.rs2_in[3] top.tb_veresk.cpu.rs2_in[2] top.tb_veresk.cpu.rs2_in[1] top.tb_veresk.cpu.rs2_in[0]
@@ -87,6 +89,7 @@ top.tb_veresk.cpu.decode_r.rs2_req
 @24
 +{rs1_sel} #{top.tb_veresk.cpu.decode_r.rs1_sel[4:0]} top.tb_veresk.cpu.decode_r.rs1_sel[4] top.tb_veresk.cpu.decode_r.rs1_sel[3] top.tb_veresk.cpu.decode_r.rs1_sel[2] top.tb_veresk.cpu.decode_r.rs1_sel[1] top.tb_veresk.cpu.decode_r.rs1_sel[0]
 +{rs2_sel} #{top.tb_veresk.cpu.decode_r.rs2_sel[4:0]} top.tb_veresk.cpu.decode_r.rs2_sel[4] top.tb_veresk.cpu.decode_r.rs2_sel[3] top.tb_veresk.cpu.decode_r.rs2_sel[2] top.tb_veresk.cpu.decode_r.rs2_sel[1] top.tb_veresk.cpu.decode_r.rs2_sel[0]
++{rd_sel} #{top.tb_veresk.cpu.decode_r.rd.sel[4:0]} top.tb_veresk.cpu.decode_r.rd.sel[4] top.tb_veresk.cpu.decode_r.rd.sel[3] top.tb_veresk.cpu.decode_r.rd.sel[2] top.tb_veresk.cpu.decode_r.rd.sel[1] top.tb_veresk.cpu.decode_r.rd.sel[0]
 @22
 +{imm} #{top.tb_veresk.cpu.decode_r.imm[31:0]} top.tb_veresk.cpu.decode_r.imm[31] top.tb_veresk.cpu.decode_r.imm[30] top.tb_veresk.cpu.decode_r.imm[29] top.tb_veresk.cpu.decode_r.imm[28] top.tb_veresk.cpu.decode_r.imm[27] top.tb_veresk.cpu.decode_r.imm[26] top.tb_veresk.cpu.decode_r.imm[25] top.tb_veresk.cpu.decode_r.imm[24] top.tb_veresk.cpu.decode_r.imm[23] top.tb_veresk.cpu.decode_r.imm[22] top.tb_veresk.cpu.decode_r.imm[21] top.tb_veresk.cpu.decode_r.imm[20] top.tb_veresk.cpu.decode_r.imm[19] top.tb_veresk.cpu.decode_r.imm[18] top.tb_veresk.cpu.decode_r.imm[17] top.tb_veresk.cpu.decode_r.imm[16] top.tb_veresk.cpu.decode_r.imm[15] top.tb_veresk.cpu.decode_r.imm[14] top.tb_veresk.cpu.decode_r.imm[13] top.tb_veresk.cpu.decode_r.imm[12] top.tb_veresk.cpu.decode_r.imm[11] top.tb_veresk.cpu.decode_r.imm[10] top.tb_veresk.cpu.decode_r.imm[9] top.tb_veresk.cpu.decode_r.imm[8] top.tb_veresk.cpu.decode_r.imm[7] top.tb_veresk.cpu.decode_r.imm[6] top.tb_veresk.cpu.decode_r.imm[5] top.tb_veresk.cpu.decode_r.imm[4] top.tb_veresk.cpu.decode_r.imm[3] top.tb_veresk.cpu.decode_r.imm[2] top.tb_veresk.cpu.decode_r.imm[1] top.tb_veresk.cpu.decode_r.imm[0]
 @28
@@ -108,7 +111,7 @@ top.tb_veresk.cpu.decode_r.rs2_req
 @22
 [color] 1
 +{target_addr} #{top.tb_veresk.cpu.exec_r.target.addr[31:0]} top.tb_veresk.cpu.exec_r.target.addr[31] top.tb_veresk.cpu.exec_r.target.addr[30] top.tb_veresk.cpu.exec_r.target.addr[29] top.tb_veresk.cpu.exec_r.target.addr[28] top.tb_veresk.cpu.exec_r.target.addr[27] top.tb_veresk.cpu.exec_r.target.addr[26] top.tb_veresk.cpu.exec_r.target.addr[25] top.tb_veresk.cpu.exec_r.target.addr[24] top.tb_veresk.cpu.exec_r.target.addr[23] top.tb_veresk.cpu.exec_r.target.addr[22] top.tb_veresk.cpu.exec_r.target.addr[21] top.tb_veresk.cpu.exec_r.target.addr[20] top.tb_veresk.cpu.exec_r.target.addr[19] top.tb_veresk.cpu.exec_r.target.addr[18] top.tb_veresk.cpu.exec_r.target.addr[17] top.tb_veresk.cpu.exec_r.target.addr[16] top.tb_veresk.cpu.exec_r.target.addr[15] top.tb_veresk.cpu.exec_r.target.addr[14] top.tb_veresk.cpu.exec_r.target.addr[13] top.tb_veresk.cpu.exec_r.target.addr[12] top.tb_veresk.cpu.exec_r.target.addr[11] top.tb_veresk.cpu.exec_r.target.addr[10] top.tb_veresk.cpu.exec_r.target.addr[9] top.tb_veresk.cpu.exec_r.target.addr[8] top.tb_veresk.cpu.exec_r.target.addr[7] top.tb_veresk.cpu.exec_r.target.addr[6] top.tb_veresk.cpu.exec_r.target.addr[5] top.tb_veresk.cpu.exec_r.target.addr[4] top.tb_veresk.cpu.exec_r.target.addr[3] top.tb_veresk.cpu.exec_r.target.addr[2] top.tb_veresk.cpu.exec_r.target.addr[1] top.tb_veresk.cpu.exec_r.target.addr[0]
-@c00200
+@800200
 -wb_r
 @28
 top.tb_veresk.cpu.wb_r.load
@@ -116,19 +119,9 @@ top.tb_veresk.cpu.wb_r.load
 @22
 +{rd_dat} #{top.tb_veresk.cpu.wb_r.rd.dat[31:0]} top.tb_veresk.cpu.wb_r.rd.dat[31] top.tb_veresk.cpu.wb_r.rd.dat[30] top.tb_veresk.cpu.wb_r.rd.dat[29] top.tb_veresk.cpu.wb_r.rd.dat[28] top.tb_veresk.cpu.wb_r.rd.dat[27] top.tb_veresk.cpu.wb_r.rd.dat[26] top.tb_veresk.cpu.wb_r.rd.dat[25] top.tb_veresk.cpu.wb_r.rd.dat[24] top.tb_veresk.cpu.wb_r.rd.dat[23] top.tb_veresk.cpu.wb_r.rd.dat[22] top.tb_veresk.cpu.wb_r.rd.dat[21] top.tb_veresk.cpu.wb_r.rd.dat[20] top.tb_veresk.cpu.wb_r.rd.dat[19] top.tb_veresk.cpu.wb_r.rd.dat[18] top.tb_veresk.cpu.wb_r.rd.dat[17] top.tb_veresk.cpu.wb_r.rd.dat[16] top.tb_veresk.cpu.wb_r.rd.dat[15] top.tb_veresk.cpu.wb_r.rd.dat[14] top.tb_veresk.cpu.wb_r.rd.dat[13] top.tb_veresk.cpu.wb_r.rd.dat[12] top.tb_veresk.cpu.wb_r.rd.dat[11] top.tb_veresk.cpu.wb_r.rd.dat[10] top.tb_veresk.cpu.wb_r.rd.dat[9] top.tb_veresk.cpu.wb_r.rd.dat[8] top.tb_veresk.cpu.wb_r.rd.dat[7] top.tb_veresk.cpu.wb_r.rd.dat[6] top.tb_veresk.cpu.wb_r.rd.dat[5] top.tb_veresk.cpu.wb_r.rd.dat[4] top.tb_veresk.cpu.wb_r.rd.dat[3] top.tb_veresk.cpu.wb_r.rd.dat[2] top.tb_veresk.cpu.wb_r.rd.dat[1] top.tb_veresk.cpu.wb_r.rd.dat[0]
 +{rd_sel} #{top.tb_veresk.cpu.wb_r.rd.sel[4:0]} top.tb_veresk.cpu.wb_r.rd.sel[4] top.tb_veresk.cpu.wb_r.rd.sel[3] top.tb_veresk.cpu.wb_r.rd.sel[2] top.tb_veresk.cpu.wb_r.rd.sel[1] top.tb_veresk.cpu.wb_r.rd.sel[0]
-@1401200
+@1000200
 -wb_r
-@1000200
 -exec_r
-@800200
--mem_out
-@22
-+{addr} #{top.tb_veresk.cpu.exec_r.mem_out.addr[31:0]} top.tb_veresk.cpu.exec_r.mem_out.addr[31] top.tb_veresk.cpu.exec_r.mem_out.addr[30] top.tb_veresk.cpu.exec_r.mem_out.addr[29] top.tb_veresk.cpu.exec_r.mem_out.addr[28] top.tb_veresk.cpu.exec_r.mem_out.addr[27] top.tb_veresk.cpu.exec_r.mem_out.addr[26] top.tb_veresk.cpu.exec_r.mem_out.addr[25] top.tb_veresk.cpu.exec_r.mem_out.addr[24] top.tb_veresk.cpu.exec_r.mem_out.addr[23] top.tb_veresk.cpu.exec_r.mem_out.addr[22] top.tb_veresk.cpu.exec_r.mem_out.addr[21] top.tb_veresk.cpu.exec_r.mem_out.addr[20] top.tb_veresk.cpu.exec_r.mem_out.addr[19] top.tb_veresk.cpu.exec_r.mem_out.addr[18] top.tb_veresk.cpu.exec_r.mem_out.addr[17] top.tb_veresk.cpu.exec_r.mem_out.addr[16] top.tb_veresk.cpu.exec_r.mem_out.addr[15] top.tb_veresk.cpu.exec_r.mem_out.addr[14] top.tb_veresk.cpu.exec_r.mem_out.addr[13] top.tb_veresk.cpu.exec_r.mem_out.addr[12] top.tb_veresk.cpu.exec_r.mem_out.addr[11] top.tb_veresk.cpu.exec_r.mem_out.addr[10] top.tb_veresk.cpu.exec_r.mem_out.addr[9] top.tb_veresk.cpu.exec_r.mem_out.addr[8] top.tb_veresk.cpu.exec_r.mem_out.addr[7] top.tb_veresk.cpu.exec_r.mem_out.addr[6] top.tb_veresk.cpu.exec_r.mem_out.addr[5] top.tb_veresk.cpu.exec_r.mem_out.addr[4] top.tb_veresk.cpu.exec_r.mem_out.addr[3] top.tb_veresk.cpu.exec_r.mem_out.addr[2] top.tb_veresk.cpu.exec_r.mem_out.addr[1] top.tb_veresk.cpu.exec_r.mem_out.addr[0]
-@28
-top.tb_veresk.cpu.exec_r.mem_out.re
-top.tb_veresk.cpu.exec_r.mem_out.we
-@1000200
--mem_out
 @800200
 -rd_out
 @28
@@ -143,6 +136,7 @@ top.tb_veresk.cpu.rd_out.en
 -
 @22
 +{regs[1]} #{top.tb_veresk.cpu.regs_i.regs[1][31:0]} top.tb_veresk.cpu.regs_i.regs[1][31] top.tb_veresk.cpu.regs_i.regs[1][30] top.tb_veresk.cpu.regs_i.regs[1][29] top.tb_veresk.cpu.regs_i.regs[1][28] top.tb_veresk.cpu.regs_i.regs[1][27] top.tb_veresk.cpu.regs_i.regs[1][26] top.tb_veresk.cpu.regs_i.regs[1][25] top.tb_veresk.cpu.regs_i.regs[1][24] top.tb_veresk.cpu.regs_i.regs[1][23] top.tb_veresk.cpu.regs_i.regs[1][22] top.tb_veresk.cpu.regs_i.regs[1][21] top.tb_veresk.cpu.regs_i.regs[1][20] top.tb_veresk.cpu.regs_i.regs[1][19] top.tb_veresk.cpu.regs_i.regs[1][18] top.tb_veresk.cpu.regs_i.regs[1][17] top.tb_veresk.cpu.regs_i.regs[1][16] top.tb_veresk.cpu.regs_i.regs[1][15] top.tb_veresk.cpu.regs_i.regs[1][14] top.tb_veresk.cpu.regs_i.regs[1][13] top.tb_veresk.cpu.regs_i.regs[1][12] top.tb_veresk.cpu.regs_i.regs[1][11] top.tb_veresk.cpu.regs_i.regs[1][10] top.tb_veresk.cpu.regs_i.regs[1][9] top.tb_veresk.cpu.regs_i.regs[1][8] top.tb_veresk.cpu.regs_i.regs[1][7] top.tb_veresk.cpu.regs_i.regs[1][6] top.tb_veresk.cpu.regs_i.regs[1][5] top.tb_veresk.cpu.regs_i.regs[1][4] top.tb_veresk.cpu.regs_i.regs[1][3] top.tb_veresk.cpu.regs_i.regs[1][2] top.tb_veresk.cpu.regs_i.regs[1][1] top.tb_veresk.cpu.regs_i.regs[1][0]
++{regs[2]} #{top.tb_veresk.cpu.regs_i.regs[2][31:0]} top.tb_veresk.cpu.regs_i.regs[2][31] top.tb_veresk.cpu.regs_i.regs[2][30] top.tb_veresk.cpu.regs_i.regs[2][29] top.tb_veresk.cpu.regs_i.regs[2][28] top.tb_veresk.cpu.regs_i.regs[2][27] top.tb_veresk.cpu.regs_i.regs[2][26] top.tb_veresk.cpu.regs_i.regs[2][25] top.tb_veresk.cpu.regs_i.regs[2][24] top.tb_veresk.cpu.regs_i.regs[2][23] top.tb_veresk.cpu.regs_i.regs[2][22] top.tb_veresk.cpu.regs_i.regs[2][21] top.tb_veresk.cpu.regs_i.regs[2][20] top.tb_veresk.cpu.regs_i.regs[2][19] top.tb_veresk.cpu.regs_i.regs[2][18] top.tb_veresk.cpu.regs_i.regs[2][17] top.tb_veresk.cpu.regs_i.regs[2][16] top.tb_veresk.cpu.regs_i.regs[2][15] top.tb_veresk.cpu.regs_i.regs[2][14] top.tb_veresk.cpu.regs_i.regs[2][13] top.tb_veresk.cpu.regs_i.regs[2][12] top.tb_veresk.cpu.regs_i.regs[2][11] top.tb_veresk.cpu.regs_i.regs[2][10] top.tb_veresk.cpu.regs_i.regs[2][9] top.tb_veresk.cpu.regs_i.regs[2][8] top.tb_veresk.cpu.regs_i.regs[2][7] top.tb_veresk.cpu.regs_i.regs[2][6] top.tb_veresk.cpu.regs_i.regs[2][5] top.tb_veresk.cpu.regs_i.regs[2][4] top.tb_veresk.cpu.regs_i.regs[2][3] top.tb_veresk.cpu.regs_i.regs[2][2] top.tb_veresk.cpu.regs_i.regs[2][1] top.tb_veresk.cpu.regs_i.regs[2][0]
 +{regs[5]} #{top.tb_veresk.cpu.regs_i.regs[5][31:0]} top.tb_veresk.cpu.regs_i.regs[5][31] top.tb_veresk.cpu.regs_i.regs[5][30] top.tb_veresk.cpu.regs_i.regs[5][29] top.tb_veresk.cpu.regs_i.regs[5][28] top.tb_veresk.cpu.regs_i.regs[5][27] top.tb_veresk.cpu.regs_i.regs[5][26] top.tb_veresk.cpu.regs_i.regs[5][25] top.tb_veresk.cpu.regs_i.regs[5][24] top.tb_veresk.cpu.regs_i.regs[5][23] top.tb_veresk.cpu.regs_i.regs[5][22] top.tb_veresk.cpu.regs_i.regs[5][21] top.tb_veresk.cpu.regs_i.regs[5][20] top.tb_veresk.cpu.regs_i.regs[5][19] top.tb_veresk.cpu.regs_i.regs[5][18] top.tb_veresk.cpu.regs_i.regs[5][17] top.tb_veresk.cpu.regs_i.regs[5][16] top.tb_veresk.cpu.regs_i.regs[5][15] top.tb_veresk.cpu.regs_i.regs[5][14] top.tb_veresk.cpu.regs_i.regs[5][13] top.tb_veresk.cpu.regs_i.regs[5][12] top.tb_veresk.cpu.regs_i.regs[5][11] top.tb_veresk.cpu.regs_i.regs[5][10] top.tb_veresk.cpu.regs_i.regs[5][9] top.tb_veresk.cpu.regs_i.regs[5][8] top.tb_veresk.cpu.regs_i.regs[5][7] top.tb_veresk.cpu.regs_i.regs[5][6] top.tb_veresk.cpu.regs_i.regs[5][5] top.tb_veresk.cpu.regs_i.regs[5][4] top.tb_veresk.cpu.regs_i.regs[5][3] top.tb_veresk.cpu.regs_i.regs[5][2] top.tb_veresk.cpu.regs_i.regs[5][1] top.tb_veresk.cpu.regs_i.regs[5][0]
 +{regs[8]} #{top.tb_veresk.cpu.regs_i.regs[8][31:0]} top.tb_veresk.cpu.regs_i.regs[8][31] top.tb_veresk.cpu.regs_i.regs[8][30] top.tb_veresk.cpu.regs_i.regs[8][29] top.tb_veresk.cpu.regs_i.regs[8][28] top.tb_veresk.cpu.regs_i.regs[8][27] top.tb_veresk.cpu.regs_i.regs[8][26] top.tb_veresk.cpu.regs_i.regs[8][25] top.tb_veresk.cpu.regs_i.regs[8][24] top.tb_veresk.cpu.regs_i.regs[8][23] top.tb_veresk.cpu.regs_i.regs[8][22] top.tb_veresk.cpu.regs_i.regs[8][21] top.tb_veresk.cpu.regs_i.regs[8][20] top.tb_veresk.cpu.regs_i.regs[8][19] top.tb_veresk.cpu.regs_i.regs[8][18] top.tb_veresk.cpu.regs_i.regs[8][17] top.tb_veresk.cpu.regs_i.regs[8][16] top.tb_veresk.cpu.regs_i.regs[8][15] top.tb_veresk.cpu.regs_i.regs[8][14] top.tb_veresk.cpu.regs_i.regs[8][13] top.tb_veresk.cpu.regs_i.regs[8][12] top.tb_veresk.cpu.regs_i.regs[8][11] top.tb_veresk.cpu.regs_i.regs[8][10] top.tb_veresk.cpu.regs_i.regs[8][9] top.tb_veresk.cpu.regs_i.regs[8][8] top.tb_veresk.cpu.regs_i.regs[8][7] top.tb_veresk.cpu.regs_i.regs[8][6] top.tb_veresk.cpu.regs_i.regs[8][5] top.tb_veresk.cpu.regs_i.regs[8][4] top.tb_veresk.cpu.regs_i.regs[8][3] top.tb_veresk.cpu.regs_i.regs[8][2] top.tb_veresk.cpu.regs_i.regs[8][1] top.tb_veresk.cpu.regs_i.regs[8][0]
 +{regs[9]} #{top.tb_veresk.cpu.regs_i.regs[9][31:0]} top.tb_veresk.cpu.regs_i.regs[9][31] top.tb_veresk.cpu.regs_i.regs[9][30] top.tb_veresk.cpu.regs_i.regs[9][29] top.tb_veresk.cpu.regs_i.regs[9][28] top.tb_veresk.cpu.regs_i.regs[9][27] top.tb_veresk.cpu.regs_i.regs[9][26] top.tb_veresk.cpu.regs_i.regs[9][25] top.tb_veresk.cpu.regs_i.regs[9][24] top.tb_veresk.cpu.regs_i.regs[9][23] top.tb_veresk.cpu.regs_i.regs[9][22] top.tb_veresk.cpu.regs_i.regs[9][21] top.tb_veresk.cpu.regs_i.regs[9][20] top.tb_veresk.cpu.regs_i.regs[9][19] top.tb_veresk.cpu.regs_i.regs[9][18] top.tb_veresk.cpu.regs_i.regs[9][17] top.tb_veresk.cpu.regs_i.regs[9][16] top.tb_veresk.cpu.regs_i.regs[9][15] top.tb_veresk.cpu.regs_i.regs[9][14] top.tb_veresk.cpu.regs_i.regs[9][13] top.tb_veresk.cpu.regs_i.regs[9][12] top.tb_veresk.cpu.regs_i.regs[9][11] top.tb_veresk.cpu.regs_i.regs[9][10] top.tb_veresk.cpu.regs_i.regs[9][9] top.tb_veresk.cpu.regs_i.regs[9][8] top.tb_veresk.cpu.regs_i.regs[9][7] top.tb_veresk.cpu.regs_i.regs[9][6] top.tb_veresk.cpu.regs_i.regs[9][5] top.tb_veresk.cpu.regs_i.regs[9][4] top.tb_veresk.cpu.regs_i.regs[9][3] top.tb_veresk.cpu.regs_i.regs[9][2] top.tb_veresk.cpu.regs_i.regs[9][1] top.tb_veresk.cpu.regs_i.regs[9][0]
@@ -160,5 +154,11 @@ top.tb_veresk.cpu.rd_out.en
 top.tb_veresk.io_out.re
 @1000200
 -io_out
+@200
+-
+@22
++{gpio} #{top.tb_veresk.gpio[31:0]} top.tb_veresk.gpio[31] top.tb_veresk.gpio[30] top.tb_veresk.gpio[29] top.tb_veresk.gpio[28] top.tb_veresk.gpio[27] top.tb_veresk.gpio[26] top.tb_veresk.gpio[25] top.tb_veresk.gpio[24] top.tb_veresk.gpio[23] top.tb_veresk.gpio[22] top.tb_veresk.gpio[21] top.tb_veresk.gpio[20] top.tb_veresk.gpio[19] top.tb_veresk.gpio[18] top.tb_veresk.gpio[17] top.tb_veresk.gpio[16] top.tb_veresk.gpio[15] top.tb_veresk.gpio[14] top.tb_veresk.gpio[13] top.tb_veresk.gpio[12] top.tb_veresk.gpio[11] top.tb_veresk.gpio[10] top.tb_veresk.gpio[9] top.tb_veresk.gpio[8] top.tb_veresk.gpio[7] top.tb_veresk.gpio[6] top.tb_veresk.gpio[5] top.tb_veresk.gpio[4] top.tb_veresk.gpio[3] top.tb_veresk.gpio[2] top.tb_veresk.gpio[1] top.tb_veresk.gpio[0]
+@28
+top.tb_veresk.uart_tx
 [pattern_trace] 1
 [pattern_trace] 0

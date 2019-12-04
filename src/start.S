@@ -7,4 +7,4 @@ _start:
 	jal	ra, main
 
 L1:
-	beq	zero, zero, L1
+	j	L1

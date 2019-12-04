@@ -42,7 +42,7 @@ architecture rtl of veresk is
 
     signal rs1_out, rs2_out	: cell_type;
     signal rs1_in, rs2_in	: cell_type;
-    signal rd_out		: rd_type;
+    signal rd_out, rd_out_r	: rd_type;
 
     signal mem_out		: rd_type;
 
@@ -62,17 +62,17 @@ begin
     rd_out <=
 	decode_r.rd	when decode_r.rd.en = '1' else
 	mem_out		when mem_out.en = '1' else
-	exec.rd;
+	wb_r.rd;
 
     rs1_in <=
 	exec_r.rd.dat	when exec_r.rd.en = '1' and decode_r.rs1_req = '1' and decode_r.rs1_sel = exec_r.rd.sel else
-	wb_r.rd.dat	when wb_r.rd.en = '1' and decode_r.rs1_req = '1' and decode_r.rs1_sel = wb_r.rd.sel else
+	rd_out_r.dat	when rd_out_r.en = '1' and decode_r.rs1_req = '1' and decode_r.rs1_sel = rd_out_r.sel else
 	mem_out.dat	when mem_out.en = '1' and decode_r.rs1_req = '1' and decode_r.rs1_sel = mem_out.sel else
 	rs1_out;
 
     rs2_in <=
 	exec_r.rd.dat	when exec_r.rd.en = '1' and decode_r.rs2_req = '1' and decode_r.rs2_sel = exec_r.rd.sel else
-	wb_r.rd.dat	when wb_r.rd.en = '1' and decode_r.rs2_req = '1' and decode_r.rs2_sel = wb_r.rd.sel else
+	rd_out_r.dat	when rd_out_r.en = '1' and decode_r.rs2_req = '1' and decode_r.rs2_sel = rd_out_r.sel else
 	mem_out.dat	when mem_out.en = '1' and decode_r.rs2_req = '1' and decode_r.rs2_sel = mem_out.sel else
 	rs2_out;
 
@@ -92,6 +92,20 @@ begin
 	    else
 		pc <= pc_next;
 		stall_r <= stall;
+	    end if;
+	end if;
+    end process;
+
+    -- RD delay --
+
+    process (clk, rst) begin
+	if rising_edge(clk) then
+	    if rst = '1' then
+	        rd_out_r.en <= '0';
+	        rd_out_r.sel <= (others => '0');
+	        rd_out_r.dat <= (others => '0');
+	    else
+		rd_out_r <= rd_out;
 	    end if;
 	end if;
     end process;

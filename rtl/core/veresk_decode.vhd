@@ -99,7 +99,7 @@ begin
     decode.target.addr <= unsigned(decode.pc) + unsigned(decode.imm);
 
     decode.rd.sel <= inst(11 downto 7);
-    decode.rd.en <= decode.jal;
+    decode.rd.en <= '1' when decode.jal = '1' and decode.rd.sel /= REG0 else '0';
     decode.rd.dat <= std_logic_vector(unsigned(pc) + 4);
 
     process (inst, subset) begin
