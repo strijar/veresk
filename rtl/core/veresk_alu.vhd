@@ -81,6 +81,16 @@ begin
 		when RV32_FN3_XORI =>
 		    alu_out <= r1 xor decode.imm;
 
+		when RV32_FN3_SLLI =>
+		    alu_out <= std_logic_vector(shift_left(unsigned(r1), to_integer(unsigned(decode.imm(4 downto 0)))));
+
+		when RV32_FN3_SRLI =>
+		    if decode.fn7 = RV32_FN7_0 then
+			alu_out <= std_logic_vector(shift_right(unsigned(r1), to_integer(unsigned(decode.imm(4 downto 0)))));
+		    else
+			alu_out <= std_logic_vector(shift_right(signed(r1), to_integer(unsigned(decode.imm(4 downto 0)))));
+		    end if;
+
 		when others =>
 	    end case;
 	elsif decode.alu_reg = '1' then
@@ -114,6 +124,16 @@ begin
 
 		when RV32_FN3_XOR =>
 		    alu_out <= r1 xor r2;
+
+		when RV32_FN3_SLL =>
+		    alu_out <= std_logic_vector(shift_left(unsigned(r1), to_integer(unsigned(r2(4 downto 0)))));
+
+		when RV32_FN3_SRL =>
+		    if decode.fn7 = RV32_FN7_0 then
+			alu_out <= std_logic_vector(shift_right(unsigned(r1), to_integer(unsigned(r2(4 downto 0)))));
+		    else
+			alu_out <= std_logic_vector(shift_right(signed(r1), to_integer(unsigned(r2(4 downto 0)))));
+		    end if;
 
 		when others =>
 	    end case;
