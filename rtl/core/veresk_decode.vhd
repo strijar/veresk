@@ -103,8 +103,6 @@ begin
     decode.rd.dat <= std_logic_vector(unsigned(pc) + 4);
 
     process (inst, subset) begin
-	decode.imm <= (others => '0');
-
 	case subset is
 	    when itype =>
 		decode.imm(11 downto 0) <= inst(31 downto 20);
@@ -124,6 +122,7 @@ begin
 
 	    when utype =>
 		decode.imm(31 downto 12) <= inst(31 downto 12);
+		decode.imm(11 downto 0) <= (others => '0');
 
 	    when jtype =>
 		decode.imm(31 downto 20) <= (others => inst(31));
@@ -133,6 +132,7 @@ begin
 		decode.imm(0) <= '0';
 
 	    when others =>
+		decode.imm <= (others => '0');
 	end case;
     end process;
 

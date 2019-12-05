@@ -11,8 +11,8 @@ void main(void) {
 
     while (1) {
 	*gpio = 0;
-	delay(10);
+	delay(10000000);
 	*gpio = 1;
-	delay(10);
+	delay(10000000);
     }
 }

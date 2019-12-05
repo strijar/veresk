@@ -93,7 +93,7 @@ begin
 	    when x"4" =>
 		bus_out.dat(0) <= tx_busy;
 		bus_out.dat(1) <= rx_ready_r;
-		bus_out.dat(31 downto 3) <= (others => '0');
+		bus_out.dat(31 downto 2) <= (others => '0');
 
 	    when others =>
 		bus_out.dat <= (others => '0');
