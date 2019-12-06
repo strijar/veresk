@@ -66,12 +66,14 @@ begin
 
     rs1_in <=
 	exec_r.rd.dat	when exec_r.rd.en = '1' and decode_r.rs1_req = '1' and decode_r.rs1_sel = exec_r.rd.sel else
+	rd_out.dat	when rd_out.en = '1' and decode_r.rs1_req = '1' and decode_r.rs1_sel = rd_out.sel else
 	rd_out_r.dat	when rd_out_r.en = '1' and decode_r.rs1_req = '1' and decode_r.rs1_sel = rd_out_r.sel else
 	mem_out.dat	when mem_out.en = '1' and decode_r.rs1_req = '1' and decode_r.rs1_sel = mem_out.sel else
 	rs1_out;
 
     rs2_in <=
 	exec_r.rd.dat	when exec_r.rd.en = '1' and decode_r.rs2_req = '1' and decode_r.rs2_sel = exec_r.rd.sel else
+	rd_out.dat	when rd_out.en = '1' and decode_r.rs2_req = '1' and decode_r.rs2_sel = rd_out.sel else
 	rd_out_r.dat	when rd_out_r.en = '1' and decode_r.rs2_req = '1' and decode_r.rs2_sel = rd_out_r.sel else
 	mem_out.dat	when mem_out.en = '1' and decode_r.rs2_req = '1' and decode_r.rs2_sel = mem_out.sel else
 	rs2_out;

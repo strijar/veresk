@@ -9,6 +9,7 @@ SRC = \
     ../core/veresk_fetch.vhd\
     ../core/veresk_decode.vhd\
     ../core/veresk_regs.vhd\
+    ../core/veresk_shift.vhd\
     ../core/veresk_alu.vhd\
     ../core/veresk_branch.vhd\
     ../core/veresk_exec.vhd\
@@ -25,6 +26,7 @@ OBJS = \
     work/veresk_fetch.o \
     work/veresk_decode.o \
     work/veresk_regs.o \
+    work/veresk_shift.o \
     work/veresk_alu.o \
     work/veresk_branch.o \
     work/veresk_exec.o \

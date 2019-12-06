@@ -22,15 +22,6 @@ package veresk_pkg is
 
     subtype op_fn3_type is std_logic_vector(2 downto 0);
 
-    constant RV32_FN3_ADDI:		op_fn3_type := "000";
-    constant RV32_FN3_SLTI:		op_fn3_type := "010";
-    constant RV32_FN3_SLTIU:		op_fn3_type := "011";
-    constant RV32_FN3_XORI:		op_fn3_type := "100";
-    constant RV32_FN3_ORI:		op_fn3_type := "110";
-    constant RV32_FN3_ANDI:		op_fn3_type := "111";
-    constant RV32_FN3_SLLI:		op_fn3_type := "001";
-    constant RV32_FN3_SRLI:		op_fn3_type := "101";	-- SRAI
-
     constant RV32_FN3_ADD:		op_fn3_type := "000";	-- SUB
     constant RV32_FN3_SLL:		op_fn3_type := "001";
     constant RV32_FN3_SLT:		op_fn3_type := "010";

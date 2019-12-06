@@ -36,90 +36,43 @@ use ieee.numeric_std.all;
 library work;
 use work.veresk_pkg.all;
 
-entity veresk_alu is
+entity veresk_shift is
     port (
-	decode		: in decode_type;
-	r1		: in cell_type;
-	r2		: in cell_type;
+	shift_in	: in cell_type;
+	count		: in std_logic_vector(4 downto 0);
 
-	alu_out		: out cell_type
+	arith		: in std_logic;
+	right		: in std_logic;
+
+	shift_out	: out cell_type
     );
-end veresk_alu;
+end veresk_shift;
 
-architecture rtl of veresk_alu is
+architecture rtl of veresk_shift is
 
-    signal second	: cell_type;
+    signal sign			: std_logic;
+    signal fill			: std_logic_vector(31 downto 16);
 
-    signal shift_arith	: std_logic;
-    signal shift_right	: std_logic;
-    signal shift_out	: cell_type;
+    signal l1, l2, l4, l8, l16	: cell_type;
+    signal r1, r2, r4, r8, r16	: cell_type;
 
 begin
 
-    second <= r2 when decode.alu_reg = '1' else decode.imm;
+    sign <= arith and shift_in(31);
+    fill <= (others => sign);
 
-    shift_i: entity work.veresk_shift
-	port map(
-	    shift_in	=> r1,
-	    count	=> second(4 downto 0),
-	    arith	=> shift_arith,
-	    right	=> shift_right,
+    l1 <= shift_in(30 downto 0) & '0' when count(0) = '1' else shift_in;
+    l2 <= shift_in(29 downto 0) & "00" when count(1) = '1' else l1;
+    l4 <= shift_in(27 downto 0) & "0000" when count(2) = '1' else l2;
+    l8 <= shift_in(23 downto 0) & "00000000" when count(3) = '1' else l4;
+    l16 <= shift_in(15 downto 0) & "0000000000000000" when count(4) = '1' else l8;
 
-	    shift_out	=> shift_out
-	);
+    r1 <= fill(31) & shift_in(31 downto 1) when count(0) = '1' else shift_in;
+    r2 <= fill(31 downto 30) & r1(31 downto 2) when count(1) = '1' else r1;
+    r4 <= fill(31 downto 28) & r2(31 downto 4) when count(2) = '1' else r2;
+    r8 <= fill(31 downto 24) & r4(31 downto 8) when count(3) = '1' else r4;
+    r16 <= fill(31 downto 16) & r8(31 downto 16) when count(4) = '1' else r8;
 
-    process (decode, r1, second, shift_out) begin
-	alu_out <= (others => '0');
-        shift_right <= '0';
-        shift_arith <= '0';
-
-	if decode.alu = '1' then
-	    case decode.fn3 is
-		when RV32_FN3_ADD =>
-		    if decode.alu_reg = '1' then
-			if decode.fn7(5) = '0' then
-		    	    alu_out <= std_logic_vector(signed(r1) + signed(r2));
-			else
-		    	    alu_out <= std_logic_vector(signed(r1) - signed(r2));
-			end if;
-		    else
-		    	alu_out <= std_logic_vector(signed(r1) + signed(decode.imm));
-		    end if;
-
-		when RV32_FN3_SLT =>
-		    if signed(r1) < signed(second) then
-			alu_out <= x"00000001";
-		    else
-			alu_out <= x"00000000";
-		    end if;
-
-		when RV32_FN3_SLTU =>
-		    if unsigned(r1) < unsigned(second) then
-			alu_out <= x"00000001";
-		    else
-			alu_out <= x"00000000";
-		    end if;
-
-		when RV32_FN3_AND =>
-		    alu_out <= r1 and second;
-
-		when RV32_FN3_OR =>
-		    alu_out <= r1 or second;
-
-		when RV32_FN3_XOR =>
-		    alu_out <= r1 xor second;
-
-		when RV32_FN3_SLL =>
-		    alu_out <= shift_out;
-
-		when RV32_FN3_SRL =>
-		    shift_arith <= decode.fn7(5);
-		    shift_right <= '1';
-		    alu_out <= shift_out;
-
-		when others =>
-	    end case;
-	end if;
-    end process;
+    shift_out <= r16 when right = '1' else l16;
 
 end;
