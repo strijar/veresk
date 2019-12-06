@@ -68,7 +68,7 @@ begin
 	    shift_out	=> shift_out
 	);
 
-    process (decode, r1, second, shift_out) begin
+    process (decode, r1, r2, second, shift_out) begin
 	alu_out <= (others => '0');
         shift_right <= '0';
         shift_arith <= '0';

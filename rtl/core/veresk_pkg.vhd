@@ -130,6 +130,9 @@ package veresk_pkg is
 	rs1_req		: std_logic;
 	rs2_req		: std_logic;
 
+	pc_imm		: pc_type;
+	pc_4		: pc_type;
+
 	jal		: std_logic;
 	jalr		: std_logic;
 	branch		: std_logic;
@@ -154,7 +157,6 @@ package veresk_pkg is
     end record;
 
     type exec_type is record
-	pc		: pc_type;
 	rd		: rd_type;
 	target		: target_type;
 	mem_out		: mem_out_type;
