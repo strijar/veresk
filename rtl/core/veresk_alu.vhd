@@ -54,6 +54,9 @@ architecture rtl of veresk_alu is
     signal shift_right	: std_logic;
     signal shift_out	: cell_type;
 
+    signal add_sub	: cell_type;
+    signal slt, sltu	: cell_type;
+
 begin
 
     second <= r2 when decode.alu_reg = '1' else decode.imm;
@@ -68,58 +71,26 @@ begin
 	    shift_out	=> shift_out
 	);
 
-    process (decode, r1, r2, second, shift_out) begin
-	alu_out <= (others => '0');
-        shift_right <= '0';
-        shift_arith <= '0';
+    shift_right <= '1' when decode.fn3 = RV32_FN3_SRL else '0';
+    shift_arith <= shift_right and decode.fn7(5);
 
-	if decode.alu = '1' then
-	    case decode.fn3 is
-		when RV32_FN3_ADD =>
-		    if decode.alu_reg = '1' then
-			if decode.fn7(5) = '0' then
-		    	    alu_out <= std_logic_vector(signed(r1) + signed(r2));
-			else
-		    	    alu_out <= std_logic_vector(signed(r1) - signed(r2));
-			end if;
-		    else
-		    	alu_out <= std_logic_vector(signed(r1) + signed(decode.imm));
-		    end if;
+    add_sub <=
+	std_logic_vector(signed(r1) + signed(r2))	when decode.alu_reg = '1' and decode.fn7(5) = '0' else
+	std_logic_vector(signed(r1) - signed(r2))	when decode.alu_reg = '1' and decode.fn7(5) = '1' else
+	std_logic_vector(signed(r1) + signed(decode.imm));
 
-		when RV32_FN3_SLT =>
-		    if signed(r1) < signed(second) then
-			alu_out <= x"00000001";
-		    else
-			alu_out <= x"00000000";
-		    end if;
+    slt <= x"00000001" when signed(r1) < signed(second) else x"00000000";
+    sltu <= x"00000001" when unsigned(r1) < unsigned(second) else x"00000000";
 
-		when RV32_FN3_SLTU =>
-		    if unsigned(r1) < unsigned(second) then
-			alu_out <= x"00000001";
-		    else
-			alu_out <= x"00000000";
-		    end if;
-
-		when RV32_FN3_AND =>
-		    alu_out <= r1 and second;
-
-		when RV32_FN3_OR =>
-		    alu_out <= r1 or second;
-
-		when RV32_FN3_XOR =>
-		    alu_out <= r1 xor second;
-
-		when RV32_FN3_SLL =>
-		    alu_out <= shift_out;
-
-		when RV32_FN3_SRL =>
-		    shift_arith <= decode.fn7(5);
-		    shift_right <= '1';
-		    alu_out <= shift_out;
-
-		when others =>
-	    end case;
-	end if;
-    end process;
+    with decode.fn3 select alu_out <=
+	add_sub		when RV32_FN3_ADD,
+	slt		when RV32_FN3_SLT,
+	sltu		when RV32_FN3_SLTU,
+	r1 and second	when RV32_FN3_AND,
+	r1 or second	when RV32_FN3_OR,
+	r1 xor second	when RV32_FN3_XOR,
+	shift_out	when RV32_FN3_SLL,
+	shift_out	when RV32_FN3_SRL,
+	(others => '0')	when others;
 
 end;

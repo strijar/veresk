@@ -137,6 +137,9 @@ begin
 		decode_r.lui <= '0';
 		decode_r.auipc <= '0';
 
+		decode_r.pc_imm <= (others => '0');
+		decode_r.pc_4 <= (others => '0');
+
 		decode_r.target.en <= '0';
 		decode_r.target.addr <= (others => '0');
 
@@ -154,7 +157,6 @@ begin
     process (clk, rst) begin
 	if rising_edge(clk) then
 	    if rst = '1' then
---		exec_r.pc <= START_ADDR;
 		exec_r.rd.en <= '0';
 		exec_r.rd.sel <= (others => '0');
 		exec_r.rd.dat <= (others => '0');
@@ -166,7 +168,6 @@ begin
 		exec_r.mem_out.dat <= (others => '0');
 		exec_r.mem_out.addr <= (others => '0');
 	    else
---		exec_r.pc <= exec.pc;
 		exec_r.rd <= exec.rd;
 		exec_r.target <= exec.target;
 
